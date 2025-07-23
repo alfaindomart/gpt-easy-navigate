@@ -1,11 +1,14 @@
-import Arrow from "./components/arrow"
+import OpenMenu from "./components/Menu"
 
 const App = () => {
 
     return (
-        <>
-        <Arrow />
-        </>
+        
+        <div className="absolute top-8 right-3">
+            <div className="relative">
+                <OpenMenu />
+            </div>
+        </div>
     )
 }
 
