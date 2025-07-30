@@ -33,10 +33,10 @@ function OpenMenu() {
                 
                 return (
                     <div className="h-80 overflow-auto flex flex-col">
-                        {userQueries ? userQueries.map((query) => (
-                            <div key={query.dataset.messageId} className="hover:bg-gray-800 border-t border-white-800" data-id={query.dataset.messageId}>
+                        {userQueries && userQueries.length > 0 ? userQueries.map((query) => (
+                            <button onClick={() => scrollQueryToView(query.dataset.messageId)} key={query.dataset.messageId} className="hover:bg-gray-800 border-t border-white-800" data-id={query.dataset.messageId}>
                                 <div className="border-solid text-sm p-2">{truncate(query.innerText)}</div>
-                            </div>
+                            </button>
                         )) : <p>Can't find any message</p>}
                     </div>
                 )
@@ -45,6 +45,13 @@ function OpenMenu() {
 function truncate(queryContent: string) {
     const truncated = queryContent.slice(0, 100)
     return truncated
+}
+
+function scrollQueryToView(queryId: string | undefined /*the dataset is typed as DOMStringMap, which has the value: string | undefined*/ ) {
+    const getElement = document.querySelector(`[data-message-id=${queryId}]`)
+    !getElement ? console.log('the elemen is not found') :
+    console.log(getElement)
+    getElement?.scrollIntoView()
 }
 
 export default OpenMenu
