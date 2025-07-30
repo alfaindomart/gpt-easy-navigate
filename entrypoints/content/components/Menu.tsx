@@ -32,19 +32,18 @@ function OpenMenu() {
                 
                 
                 return (
-                    <>
-                        {userQueries ? userQueries.forEach(query => {
-                            <div className="flex auto" data-id={query.dataset.messageId}>
-                                <div className="border-solid">{query.innerHTML}</div>
+                    <div>
+                        {userQueries ? userQueries.map((query) => (
+                            <div key={query.dataset.messageId} className="flex auto" data-id={query.dataset.messageId}>
+                                <div className="border-solid">{truncate(query.innerText)}</div>
                             </div>
-                        }) : <p>Can't find any message</p>}
-
-                    </>
+                        )) : <p>Can't find any message</p>}
+                    </div>
                 )
     }
 
 function truncate(queryContent: string) {
-    const truncated = queryContent.slice(0, 50)
+    const truncated = queryContent.slice(0, 100)
     return truncated
 }
 
