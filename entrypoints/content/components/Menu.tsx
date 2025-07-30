@@ -32,10 +32,10 @@ function OpenMenu() {
                 
                 
                 return (
-                    <div>
+                    <div className="h-80 overflow-auto flex flex-col">
                         {userQueries ? userQueries.map((query) => (
-                            <div key={query.dataset.messageId} className="flex auto" data-id={query.dataset.messageId}>
-                                <div className="border-solid">{truncate(query.innerText)}</div>
+                            <div key={query.dataset.messageId} className="hover:bg-gray-800 border-t border-white-800" data-id={query.dataset.messageId}>
+                                <div className="border-solid text-sm p-2">{truncate(query.innerText)}</div>
                             </div>
                         )) : <p>Can't find any message</p>}
                     </div>
