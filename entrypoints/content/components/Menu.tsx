@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { ChevronRight } from "lucide-react";
-import background from "@/entrypoints/background";
 
 function OpenMenu() {
     const [isOpen, setIsOpen] = useState(false)
@@ -48,10 +47,11 @@ function truncate(queryContent: string) {
 }
 
 function scrollQueryToView(queryId: string | undefined /*the dataset is typed as DOMStringMap, which has the value: string | undefined*/ ) {
-    const getElement = document.querySelector(`[data-message-id=${queryId}]`)
-    !getElement ? console.log('the elemen is not found') :
+    const getElement = document.querySelector(`div [data-message-id="${queryId}"]`)
     console.log(getElement)
-    getElement?.scrollIntoView()
+    if (!getElement) console.log('cant find element')
+         else
+    getElement.scrollIntoView({behavior: 'smooth', block: 'center'})
 }
 
 export default OpenMenu
