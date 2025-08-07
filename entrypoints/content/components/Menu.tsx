@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChevronRight } from "lucide-react";
 
 function OpenMenu() {
     const [isOpen, setIsOpen] = useState(false)
+    
+    // observeNewQuery()
 
 
     return (
@@ -24,7 +26,6 @@ function OpenMenu() {
 
     function SidebarContent() {
                 const userQueries = [...document.querySelectorAll("[data-message-author-role='user']")] as HTMLElement[]
-                console.log(userQueries[0].dataset.messageId)
                 const testTrunc = userQueries.map((query) => truncate(query.innerText))
 
                 console.log(testTrunc)
@@ -51,7 +52,46 @@ function scrollQueryToView(queryId: string | undefined /*the dataset is typed as
     console.log(getElement)
     if (!getElement) console.log('cant find element')
          else
-    getElement.scrollIntoView({behavior: 'smooth', block: 'center'})
+    getElement.scrollIntoView({behavior: "smooth", block: 'center'})
 }
+
+
+/* Todo: use MutationObserver to update the sidebar automatically
+function debounce<T extends unknown []>(fn: (...args: T) => void, delay: number) {
+  let timeout: ReturnType<typeof setTimeout>;
+
+  return (...args: T) => {
+    clearTimeout(timeout); // cancel the previous scheduled call
+    timeout = setTimeout(() => {fn.call(null, ...args)}, delay);
+  };
+}
+
+function observeNewQuery() {
+
+    useEffect(() => {
+
+    const target = document.getElementById('thread')
+    if (!target) return
+        
+    const config = {childList: true, subtree: true };
+
+    const callback = (mutationLists: MutationRecord[], observer: MutationObserver) => {
+        if (!mutationLists) return
+        for (const mutation of mutationLists) {
+            if (mutation.type === "childList") {
+                console.log("A direct child has been added or removed")
+            } else console.log('nohting')
+            }
+        }
+            const observer = new MutationObserver(debounce(callback, 3000))
+
+                observer.observe(target, config)
+
+                    return () => {
+      observer.disconnect();
+    };
+}, [])
+    }
+*/
 
 export default OpenMenu
