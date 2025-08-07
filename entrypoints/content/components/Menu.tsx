@@ -3,7 +3,7 @@ import { ChevronRight } from "lucide-react";
 
 function OpenMenu() {
     const [isOpen, setIsOpen] = useState(false)
-    
+
     // observeNewQuery()
 
 
@@ -25,21 +25,31 @@ function OpenMenu() {
 }
 
     function SidebarContent() {
-                const userQueries = [...document.querySelectorAll("[data-message-author-role='user']")] as HTMLElement[]
-                const testTrunc = userQueries.map((query) => truncate(query.innerText))
+        const [userQueries, setUserQueries] = useState<HTMLElement[]>([])
+        
 
-                console.log(testTrunc)
-                
-                
-                return (
-                    <div className="h-80 overflow-auto flex flex-col">
-                        {userQueries && userQueries.length > 0 ? userQueries.map((query) => (
-                            <button onClick={() => scrollQueryToView(query.dataset.messageId)} key={query.dataset.messageId} className="hover:bg-gray-800 border-t border-white-800" data-id={query.dataset.messageId}>
-                                <div className="border-solid text-sm p-2">{truncate(query.innerText)}</div>
-                            </button>
-                        )) : <p>Can't find any message</p>}
-                    </div>
-                )
+        const fetchQueries = () => {
+            const queriesSelector = [...document.querySelectorAll("[data-message-author-role='user']")] as HTMLElement[]
+            setUserQueries(queriesSelector)
+        }
+
+        useEffect(() => {
+          fetchQueries()
+        }, [])
+        
+
+        // const userQueries = [...document.querySelectorAll("[data-message-author-role='user']")] as HTMLElement[]
+        
+        
+        return (
+            <div className="h-80 overflow-auto flex flex-col">
+                {userQueries && userQueries.length > 0 ? userQueries.map((query) => (
+                    <button onClick={() => scrollQueryToView(query.dataset.messageId)} key={query.dataset.messageId} className="hover:bg-gray-800 border-t border-white-800" data-id={query.dataset.messageId}>
+                        <div className="border-solid text-sm p-2">{truncate(query.innerText)}</div>
+                    </button>
+                )) : <p>Can't find any message</p>}
+            </div>
+        )
     }
 
 function truncate(queryContent: string) {
