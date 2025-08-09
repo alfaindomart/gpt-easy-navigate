@@ -1,14 +1,13 @@
 import OpenMenu from "./components/Menu"
+import Draggable from "./components/Draggable"
 
 const App = () => {
 
     return (
         
-        <div className="absolute top-8 right-3">
-            <div className="relative">
-                <OpenMenu />
-            </div>
-        </div>
+        <Draggable> 
+            <OpenMenu />
+        </Draggable>
     )
 }
 
