@@ -34,16 +34,15 @@ export default function Draggable ({children}: DraggableProps) {
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
-            // className="absolute left-{position.x} right-{position.y} width-100 height-100 cursor-{{isDragging ? cursor-grabbing : cursor-default}}"
-                  style={{
-        position: "absolute",
-        left: position.x,
-        top: position.y,
-        width: 50,
-        height: 50,
-        cursor: isDragging ? "grabbing" : "grab",
-        userSelect: "none",
-      }}
+            style={{
+                position: "absolute",
+                left: position.x,
+                top: position.y,
+                width: 50,
+                height: 50,
+                cursor: isDragging ? "grabbing" : "grab",
+                userSelect: "none",
+                }}
         >
             {children}
         </div>

@@ -2,7 +2,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App';
 
 export default defineContentScript({
-  matches: ['*://chatgpt.com/*'],
+  matches: ['*://chatgpt.com/*', '*://gemini.google.com/app/*'],
 
   main(ctx) {
   

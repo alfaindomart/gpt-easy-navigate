@@ -29,7 +29,7 @@ function OpenMenu() {
         
 
         const fetchQueries = () => {
-            const queriesSelector = [...document.querySelectorAll("[data-message-author-role='user']")] as HTMLElement[]
+            const queriesSelector = [...document.querySelectorAll("[data-message-author-role='user']")] as HTMLElement[] //need to change based on url matches
             setUserQueries(queriesSelector)
         }
 
@@ -58,7 +58,7 @@ function truncate(queryContent: string) {
 }
 
 function scrollQueryToView(queryId: string | undefined /*the dataset is typed as DOMStringMap, which has the value: string | undefined*/ ) {
-    const getElement = document.querySelector(`div [data-message-id="${queryId}"]`)
+    const getElement = document.querySelector(`div [data-message-id="${queryId}"]`) //need to change based on url matches
     console.log(getElement)
     if (!getElement) console.log('cant find element')
          else
@@ -67,6 +67,7 @@ function scrollQueryToView(queryId: string | undefined /*the dataset is typed as
 
 
 /* Todo: use MutationObserver to update the sidebar automatically
+
 function debounce<T extends unknown []>(fn: (...args: T) => void, delay: number) {
   let timeout: ReturnType<typeof setTimeout>;
 
