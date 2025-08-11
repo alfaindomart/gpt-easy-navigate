@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { ChevronRight } from "lucide-react";
+import { siteConfig, Config } from "../config";
 
 function OpenMenu() {
     const [isOpen, setIsOpen] = useState(false)
@@ -26,14 +27,31 @@ function OpenMenu() {
 
     function SidebarContent() {
         const [userQueries, setUserQueries] = useState<HTMLElement[]>([])
+        const [currSite, setCurrSite] = useState<Config | null>(null)
         
 
-        const fetchQueries = () => {
-            const queriesSelector = [...document.querySelectorAll("[data-message-author-role='user']")] as HTMLElement[] //need to change based on url matches
-            setUserQueries(queriesSelector)
+        const fetchQueries = (queriesSelector: string) => {
+            
+            if (!queriesSelector) {
+                console.log('param queriesSelector missing')
+                return
+            }
+            console.log('getting user queries...')
+            const queries = [...document.querySelectorAll(`${queriesSelector}`)] as HTMLElement[]
+            
+            setUserQueries(queries)
+        }
+
+        const getCurrSite = () => {
+            const currUrl = window.location.href
+            if (!currUrl) return
+            for ( in siteConfig) {
+
+            }
         }
 
         useEffect(() => {
+        
           fetchQueries()
         }, [])
         
