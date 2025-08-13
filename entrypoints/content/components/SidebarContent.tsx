@@ -1,22 +1,15 @@
 import { scrollQueryToView, truncate } from "../utils"
 import { Config, siteConfig } from "../config"
 
-export function SidebarContent() {
-        const [userQueries, setUserQueries] = useState<HTMLElement[]>([])
-        const [currSite, setCurrSite] = useState<Config | null>(null)
-        
+interface Prop {
+    currSite: Config | null
+    userQueries: HTMLElement[]
+}
 
-        const fetchQueries = (queriesSelector: string | undefined) => {
-            
-            if (!queriesSelector) {
-                console.log('param queriesSelector missing')
-                return
-            }
-            console.log('getting user queries...')
-            const queries = [...document.querySelectorAll(`${queriesSelector}`)] as HTMLElement[]
-            
-            setUserQueries(queries)
-        }
+export function SidebarContent ({currSite, userQueries}: Prop) {
+
+    console.log(userQueries)
+
 
         // const getSiteConfig = () => {
         //     const currHostname = window.location.hostname
@@ -30,19 +23,21 @@ export function SidebarContent() {
         //     setCurrSite(siteConfig[key])
         // }
 
-        useEffect(() => {
-            const currHostname = window.location.hostname
+        // useEffect(() => {
+        //     const currHostname = window.location.hostname
 
-            const key = Object.keys(siteConfig).find(key => siteConfig[key].hostname === currHostname)
+        //     const key = Object.keys(siteConfig).find(key => siteConfig[key].hostname === currHostname)
 
-            if (!key) return
+        //     if (!key) return
 
-            console.log(key) //output: the key of sitesConfig
+        //     console.log(key) //output: the key of sitesConfig
 
-            setCurrSite(siteConfig[key])
-            console.log(currSite)
-            fetchQueries(currSite?.selectors.userQueries)
-        }, [])        
+        //     console.log(siteConfig[key])
+
+        //     setCurrSite(siteConfig[key])
+        //     console.log('currSite is ' + currSite)
+        //     fetchQueries(currSite?.selectors.userQueries)
+        // }, [])        
         
         return (
             <div className="h-80 overflow-auto flex flex-col">

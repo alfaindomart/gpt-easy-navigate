@@ -3,7 +3,7 @@ import App from './App';
 import { siteConfig } from './config';
 
 export default defineContentScript({
-  matches: ['*://chatgpt.com/*', '*://gemini.google.com/app/*'],
+  matches: ['*://chatgpt.com/*', '*://gemini.google.com/*', 'https://google.com'],
 
   main(ctx) {
   
@@ -13,6 +13,8 @@ export default defineContentScript({
       position: 'inline',
       anchor: 'body',
       onMount: (container) => {
+
+        console.log('trying to mount...')
 
         const app = document.createElement('div')
         container.append(app)

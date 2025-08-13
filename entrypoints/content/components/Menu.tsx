@@ -1,10 +1,47 @@
 import { useState, useEffect } from "react";
 import { ChevronRight } from "lucide-react";
-import { siteConfig, Config } from "../config";
 import { SidebarContent } from "./SidebarContent";
+import { Config, siteConfig } from "../config";
 
 function OpenMenu() {
     const [isOpen, setIsOpen] = useState(false)
+    const [currSite, setCurrSite] = useState<Config|null>(null)
+    const [userQueries, setUserQueries] = useState<HTMLElement[]>([])
+
+
+    const fetchQueries = (queriesSelector: string | undefined) => {
+            
+            if (!queriesSelector) {
+                console.log('param queriesSelector missing')
+                return
+            }
+            console.log('getting user queries...')
+            console.log(currSite?.selectors.userQueries)
+            const queries = [...document.querySelectorAll(`${currSite?.selectors.userQueries}`)] as HTMLElement[]
+
+            console.log(queries)
+            
+            setUserQueries(queries)
+
+            console.log(userQueries)
+        }
+
+
+    useEffect(() => {
+            const currHostname = window.location.hostname
+
+            const key = Object.keys(siteConfig).find(key => siteConfig[key].hostname === currHostname)
+
+            if (!key) return
+
+            console.log(key) //output: the key of sitesConfig
+
+            console.log(siteConfig[key])
+
+            setCurrSite(siteConfig[key])
+            console.log(currSite)
+            fetchQueries(currSite?.selectors.userQueries)
+    }, [isOpen])
 
     // observeNewQuery()
 
@@ -18,80 +55,13 @@ function OpenMenu() {
                 {isOpen && (
     
                     <div style={{backgroundColor: 'var(--bg-elevated-secondary)'}} className="w-64">
-                        <SidebarContent />
+                        <SidebarContent currSite={currSite} userQueries={userQueries}/>
                     </div>
                 )}
             </div>
         </>
     )
 }
-
-    // function SidebarContent() {
-    //     const [userQueries, setUserQueries] = useState<HTMLElement[]>([])
-    //     const [currSite, setCurrSite] = useState<Config | null>(null)
-        
-
-    //     const fetchQueries = (queriesSelector: string | undefined) => {
-            
-    //         if (!queriesSelector) {
-    //             console.log('param queriesSelector missing')
-    //             return
-    //         }
-    //         console.log('getting user queries...')
-    //         const queries = [...document.querySelectorAll(`${queriesSelector}`)] as HTMLElement[]
-            
-    //         setUserQueries(queries)
-    //     }
-
-        // const getSiteConfig = () => {
-        //     const currHostname = window.location.hostname
-
-        //     const key = Object.keys(siteConfig).find(key => siteConfig[key].hostname === currHostname)
-
-        //     if (!key) return
-
-        //     console.log(key) //output: the key of sitesConfig
-
-        //     setCurrSite(siteConfig[key])
-        // }
-
-        // useEffect(() => {
-        //     const currHostname = window.location.hostname
-
-        //     const key = Object.keys(siteConfig).find(key => siteConfig[key].hostname === currHostname)
-
-        //     if (!key) return
-
-        //     console.log(key) //output: the key of sitesConfig
-
-        //     setCurrSite(siteConfig[key])
-        //     console.log(currSite)
-        //     fetchQueries(currSite?.selectors.userQueries)
-        // }, [])        
-        
-    //     return (
-    //         <div className="h-80 overflow-auto flex flex-col">
-    //             {userQueries && userQueries.length > 0 ? userQueries.map((query) => (
-    //                 <button onClick={() => scrollQueryToView(query.dataset.messageId)} key={query.dataset.messageId} className="hover:bg-gray-800 border-t border-white-800" data-id={query.dataset.messageId}>
-    //                     <div className="border-solid text-sm p-2">{truncate(query.innerText)}</div>
-    //                 </button>
-    //             )) : <p>Can't find any message</p>}
-    //         </div>
-    //     )
-    // }
-
-// function truncate(queryContent: string) {
-//     const truncated = queryContent.slice(0, 100)
-//     return truncated
-// }
-
-// function scrollQueryToView(queryId: string | undefined /*the dataset is typed as DOMStringMap, which has the value: string | undefined*/ ) {
-//     const getElement = document.querySelector(`div [data-message-id="${queryId}"]`) //need to change based on url matches
-//     console.log(getElement)
-//     if (!getElement) console.log('cant find element')
-//          else
-//     getElement.scrollIntoView({behavior: "smooth", block: 'center'})
-// }
 
 
 /* Todo: use MutationObserver to update the sidebar automatically

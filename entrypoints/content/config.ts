@@ -25,7 +25,7 @@ export const siteConfig: Record<string, Config>  = {
         url: '*://gemini.google.com/app/*',
         hostname: 'gemini.google.com',
         selectors: {
-            userQueries: "infinite-scroller > div .conversation-container",
+            userQueries: "span.user-query-bubble-with-background" ,
             userQuery: (queryId) => document.getElementById(queryId)
         }
     }

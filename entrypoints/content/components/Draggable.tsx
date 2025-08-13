@@ -5,7 +5,7 @@ type DraggableProps = {
 }
 
 export default function Draggable ({children}: DraggableProps) {
-    const [position, setPosition] = useState({x: 100, y: 100})
+    const [position, setPosition] = useState({x: 600, y: 50})
     const [isDragging, setIsDragging] = useState(false)
     const [offset, setOffset] = useState({x: 0, y: 0})
 
@@ -34,12 +34,10 @@ export default function Draggable ({children}: DraggableProps) {
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
+            className="fixed w-50 h-50 z-999"
             style={{
-                position: "absolute",
                 left: position.x,
                 top: position.y,
-                width: 50,
-                height: 50,
                 cursor: isDragging ? "grabbing" : "grab",
                 userSelect: "none",
                 }}
