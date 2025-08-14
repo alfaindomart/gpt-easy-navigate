@@ -15,7 +15,7 @@ function OpenMenu() {
                 console.log('param queriesSelector missing')
                 return
             }
-            console.log('getting user queries...')
+            console.log('getting user queries......')
             console.log(currSite?.selectors.userQueries)
             const queries = [...document.querySelectorAll(`${currSite?.selectors.userQueries}`)] as HTMLElement[]
 
@@ -53,7 +53,6 @@ function OpenMenu() {
             </button>
             <div className="h-height flex-col">
                 {isOpen && (
-    
                     <div style={{backgroundColor: 'var(--bg-elevated-secondary)'}} className="w-64">
                         <SidebarContent currSite={currSite} userQueries={userQueries}/>
                     </div>

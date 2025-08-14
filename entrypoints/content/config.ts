@@ -5,6 +5,7 @@ export interface Config {
     selectors: {
         userQueries: string
         userQuery: (id: string) => Element | null
+        eleKey: string
     }
 }
 
@@ -16,7 +17,8 @@ export const siteConfig: Record<string, Config>  = {
         hostname: "chatgpt.com",
         selectors: {
             userQueries: "[data-message-author-role='user']",
-            userQuery: (queryId) => document.querySelector(`div [data-message-id="${queryId}"]`)
+            userQuery: (queryId) => document.querySelector(`div [data-message-id="${queryId}"]`),
+            eleKey: 'dataset.messageId'
         }
     },
 
@@ -26,7 +28,8 @@ export const siteConfig: Record<string, Config>  = {
         hostname: 'gemini.google.com',
         selectors: {
             userQueries: "span.user-query-bubble-with-background" ,
-            userQuery: (queryId) => document.getElementById(queryId)
+            userQuery: (queryId) => document.getElementById(`${queryId}`),
+            eleKey: 'id'
         }
     }
 }

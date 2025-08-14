@@ -1,9 +1,8 @@
 import ReactDOM from 'react-dom/client'
-import App from './App';
-import { siteConfig } from './config';
+import App from './App'
 
 export default defineContentScript({
-  matches: ['*://chatgpt.com/*', '*://gemini.google.com/*', 'https://google.com'],
+  matches: ["*://chatgpt.com/*", "*://gemini.google.com/*"],
 
   main(ctx) {
   
