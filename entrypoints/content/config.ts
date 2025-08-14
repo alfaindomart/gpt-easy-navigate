@@ -5,7 +5,7 @@ export interface Config {
     selectors: {
         userQueries: string
         userQuery: (id: string) => Element | null
-        eleKey: string
+        helper: string | null //helper selector for when userQuery is sufficient 
     }
 }
 
@@ -18,7 +18,7 @@ export const siteConfig: Record<string, Config>  = {
         selectors: {
             userQueries: "[data-message-author-role='user']",
             userQuery: (queryId) => document.querySelector(`div [data-message-id="${queryId}"]`),
-            eleKey: 'dataset.messageId'
+            helper: null
         }
     },
 
@@ -29,7 +29,7 @@ export const siteConfig: Record<string, Config>  = {
         selectors: {
             userQueries: "span.user-query-bubble-with-background" ,
             userQuery: (queryId) => document.getElementById(`${queryId}`),
-            eleKey: 'id'
+            helper: null
         }
     }
 }
