@@ -1,5 +1,7 @@
+import { useState } from "react"
 import { truncate } from "../utils"
 import { Config} from "../config"
+import { Bookmark, Star } from "lucide-react"
 
 interface Prop {
     currSite: Config | null
@@ -7,6 +9,9 @@ interface Prop {
 }
 
 export function SidebarContent ({currSite, userQueries}: Prop) {
+
+    const [bookmarked, setBookmarked] = useState(false)
+
 
     // function scrollQueryToView(queryId: string | undefined /*the dataset is typed as DOMStringMap, which has the value: string | undefined*/ ) {
     //     console.log('i juset changed')
@@ -48,15 +53,26 @@ export function SidebarContent ({currSite, userQueries}: Prop) {
         //     setCurrSite(siteConfig[key])
         //     console.log('currSite is ' + currSite)
         //     fetchQueries(currSite?.selectors.userQueries)
-        // }, [])        
+        // }, [])
+        
+        function saveChat(query: HTMLElement) {
+            setBookmarked(true)
+            console.log('bookmarked!')
+            console.log(query.closest('.conversation-container')?.getAttribute('id'))
+        }
         
         switch (currSite?.name) {
             case 'ChatGPT' : return (
-                            <div className="h-80 overflow-auto flex flex-col">
+            <div className="h-80 overflow-auto flex flex-col">
                 {userQueries && userQueries.length > 0 ? userQueries.map((query) => (
-                    <button onClick={() => query.scrollIntoView()} key={query.dataset.messageId} className="hover:bg-gray-800 border-t border-white-800" data-id={query.dataset.messageId}>
-                        <div className="border-solid text-sm p-2">{truncate(query.innerText)}</div>
-                    </button>
+                    <div className="flex flex-auto" key={query.dataset.messageId}>
+                        <button onClick={() => query.scrollIntoView()} className="hover:bg-gray-800 border-t border-white-800" data-id={query.dataset.messageId}>
+                            <div className="border-solid text-sm p-2">{truncate(query.innerText)}</div>
+                        </button>
+                        <button data-bookmark={saveChat} onClick={() => saveChat(query)}>
+                            <Star size={24}/>
+                        </button>
+                    </div>
                 )) : <p>Can't find any message</p>}
             </div>
             );
@@ -64,9 +80,14 @@ export function SidebarContent ({currSite, userQueries}: Prop) {
             case 'Gemini': return (
             <div className="h-80 overflow-auto flex bg-white border-solid border-black-800">
                 {userQueries && userQueries.length > 0 ? userQueries.map((query) => (
-                    <button onClick={() => query.scrollIntoView()} key={query.id} className="hover:bg-gray-800 border-t border-white-800" data-id={query.id}>
-                        <div className="border-solid text-sm p-2">{truncate(query.innerText)}</div>
-                    </button>
+                    <div className="flex flex-auto" key={query.closest('.conversation-container')?.getAttribute('id')} data-id={query.closest('.conversation-container')?.getAttribute('id')}>
+                        <button onClick={() => query.scrollIntoView()} key={query.id} className="hover:bg-gray-800 border-t border-white-800">
+                            <div className="border-solid text-sm p-2">{truncate(query.innerText)}</div>
+                        </button>
+                        <button data-bookmark={saveChat} onClick={() => saveChat(query)}>
+                            <Star size={24}/>
+                        </button>
+                    </div>
                 )) : <p>Can't find any message</p>}
             </div>
         )
