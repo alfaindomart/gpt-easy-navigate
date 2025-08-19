@@ -1,3 +1,4 @@
+
 export interface Config {
     name: string
     url: string //for extension matches
@@ -5,8 +6,14 @@ export interface Config {
     selectors: {
         userQueries: string
         userQuery: (id: string) => Element | null
-        helper: string | null //helper selector for when userQuery is sufficient 
+        helper: (queryElement: HTMLElement) => string | null | undefined //helper selector for when userQuery is sufficient 
     }
+}
+
+export interface Bookmark {
+    key: string | null | undefined
+    chatUrl: string
+    previewChat: string
 }
 
 //What is Record? https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type
@@ -18,7 +25,7 @@ export const siteConfig: Record<string, Config>  = {
         selectors: {
             userQueries: "[data-message-author-role='user']",
             userQuery: (queryId) => document.querySelector(`div [data-message-id="${queryId}"]`),
-            helper: null
+            helper: (queryElement) => queryElement.dataset.messageId
         }
     },
 
@@ -29,7 +36,7 @@ export const siteConfig: Record<string, Config>  = {
         selectors: {
             userQueries: "span.user-query-bubble-with-background" ,
             userQuery: (queryId) => document.getElementById(`${queryId}`),
-            helper: null
+            helper: (queryElement) => queryElement.closest('.conversation-container')?.getAttribute('id')
         }
     }
 }
