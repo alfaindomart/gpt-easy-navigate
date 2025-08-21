@@ -2,6 +2,7 @@ import { useState } from "react"
 import { truncate } from "../utils"
 import { Config, Bookmark} from "../config"
 import { Star } from "lucide-react"
+import { storage } from "wxt/utils/storage"
 
 interface Prop {
     currSite: Config | null
@@ -10,7 +11,27 @@ interface Prop {
 
 export function SidebarContent ({currSite, userQueries}: Prop) {
 
-    const [bookmarked, setBookmarked] = useState(false)
+    const [bookmarked, setBookmarked] = useState(new Map())
+
+    useEffect(() => {
+       async function getSaveChats() {//get SavedChats from sync storage after rendering for the first time
+            const SavedChats = await storage.getItem<Array<Bookmark>>('sync: SavedChats') || []
+
+            console.log('getSaveChats running...')
+
+            console.log(SavedChats)
+
+            const mappedChats = new Map(SavedChats.map(savedChat => [savedChat.key, savedChat])) //change the SavedChats Array into a Map
+
+            setBookmarked(new Map(mappedChats))
+
+            console.log(mappedChats)
+
+            console.log('getSaveChatss ending...')
+        }
+
+        getSaveChats()
+    }, [])
 
 
     // function scrollQueryToView(queryId: string | undefined /*the dataset is typed as DOMStringMap, which has the value: string | undefined*/ ) {
@@ -56,22 +77,34 @@ export function SidebarContent ({currSite, userQueries}: Prop) {
         // }, [])
         
        async function saveChat(query: HTMLElement) {
-            setBookmarked(true)
-            console.log('bookmarked!')
-            console.log(query.closest('.conversation-container')?.getAttribute('id'))
-            const savedObject: Bookmark = {
+
+            const newSave: Bookmark = {
                 key: currSite?.selectors.helper(query),
                 chatUrl: window.location.href,
-                previewChat: truncate(query.innerText)
+                previewChat: truncate(query.innerText),
+                timeStamp: Date.now()
+            }
 
-            } 
-            console.log(savedObject)
-            await browser.storage.sync.set({savedChat: savedObject})
-            console.log('saving chat...')
+            const copyOfBookmark = new Map(bookmarked)  
 
+            if (copyOfBookmark.has(newSave.key)) {
+                console.log('the chat already exist, removing...')
+                copyOfBookmark.delete(newSave.key)
+            } else {
+                console.log('setting new key')
+                copyOfBookmark.set(newSave.key, newSave)
+            }
 
+            console.log(copyOfBookmark)
 
+            setBookmarked(copyOfBookmark)
 
+            console.log(bookmarked)
+
+            const updatedChats = Array.from(copyOfBookmark.values())
+            console.log('updating array')
+            console.log(updatedChats)
+            await storage.setItem("sync:SavedChats", updatedChats)
         }
         
         switch (currSite?.name) {
