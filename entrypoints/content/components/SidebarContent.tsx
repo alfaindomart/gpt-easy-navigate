@@ -128,7 +128,10 @@ export function SidebarContent ({currSite, userQueries}: Prop) {
                             <div className="border-solid text-sm p-2">{truncate(query.innerText)}</div>
                         </button>
                         <button data-bookmark={saveChat} onClick={() => saveChat(query)}>
-                            <Star size={24}/>
+                            {bookmarked.has(currSite.selectors.helper(query)) ? 
+                                 <Star size={24} fill="yellow"/> :
+                                 <Star size={24}/>
+                        }
                         </button>
                     </div>
                 )) : <p>Can't find any message</p>}
@@ -143,7 +146,10 @@ export function SidebarContent ({currSite, userQueries}: Prop) {
                             <div className="border-solid text-sm p-2">{truncate(query.innerText)}</div>
                         </button>
                         <button data-bookmark={saveChat} onClick={() => saveChat(query)}>
-                            <Star size={24}/>
+                            {bookmarked.has(currSite.selectors.helper(query)) ? 
+                                    <Star size={24} fill="yellow"/> :
+                                    <Star size={24}/>
+                            }
                         </button>
                     </div>
                 )) : <p>Can't find any message</p>}
