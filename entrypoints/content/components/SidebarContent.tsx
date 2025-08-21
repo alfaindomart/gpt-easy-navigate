@@ -14,20 +14,32 @@ export function SidebarContent ({currSite, userQueries}: Prop) {
     const [bookmarked, setBookmarked] = useState(new Map())
 
     useEffect(() => {
-       async function getSaveChats() {//get SavedChats from sync storage after rendering for the first time
-            const SavedChats = await storage.getItem<Array<Bookmark>>('sync: SavedChats') || []
+       const getSaveChats = async () => {//get SavedChats from sync storage after rendering for the first time
 
+        try {
+            const SavedChats = await storage.getItem<Array<Bookmark>>('sync:SavedChats') || [] //'sync:SavedChats' !== 'sync: SavedChats', is space sensitive!
+
+             if (!SavedChats) {
+                console.log('cant get SavedChats')
+                return
+            }
+            
             console.log('getSaveChats running...')
 
             console.log(SavedChats)
 
             const mappedChats = new Map(SavedChats.map(savedChat => [savedChat.key, savedChat])) //change the SavedChats Array into a Map
 
-            setBookmarked(new Map(mappedChats))
+            setBookmarked(mappedChats)
 
             console.log(mappedChats)
 
             console.log('getSaveChatss ending...')
+
+        } catch(err) {
+            console.log(err)
+        }
+
         }
 
         getSaveChats()
