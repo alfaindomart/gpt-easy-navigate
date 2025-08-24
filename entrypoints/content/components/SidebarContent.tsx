@@ -129,8 +129,8 @@ export function SidebarContent ({currSite, userQueries}: Prop) {
                         </button>
                         <button data-bookmark={saveChat} onClick={() => saveChat(query)}>
                             {bookmarked.has(currSite.selectors.helper(query)) ? 
-                                 <Star size={24} fill="yellow"/> :
-                                 <Star size={24}/>
+                                 <Star size={18} fill="yellow"/> :
+                                 <Star size={18}/>
                         }
                         </button>
                     </div>
@@ -139,7 +139,7 @@ export function SidebarContent ({currSite, userQueries}: Prop) {
             );
 
             case 'Gemini': return (
-            <div className="h-80 overflow-auto flex bg-white border-solid border-black-800">
+            <div className="h-80 overflow-auto flex flex-col">
                 {userQueries && userQueries.length > 0 ? userQueries.map((query) => (
                     <div className="flex flex-auto" key={currSite.selectors.helper(query)} data-id={currSite.selectors.helper(query)}>
                         <button onClick={() => query.scrollIntoView()} key={query.id} className="hover:bg-gray-800 border-t border-white-800">
@@ -147,8 +147,8 @@ export function SidebarContent ({currSite, userQueries}: Prop) {
                         </button>
                         <button data-bookmark={saveChat} onClick={() => saveChat(query)}>
                             {bookmarked.has(currSite.selectors.helper(query)) ? 
-                                    <Star size={24} fill="yellow"/> :
-                                    <Star size={24}/>
+                                    <Star size={18} fill="yellow"/> :
+                                    <Star size={18}/>
                             }
                         </button>
                     </div>

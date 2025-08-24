@@ -5,9 +5,10 @@ const App = () => {
 
     return (
         
-        <Draggable> 
-            <OpenMenu />
-        </Draggable>
+        // <Draggable> 
+        //     <OpenMenu />
+        // </Draggable>
+        <OpenMenu />
     )
 }
 

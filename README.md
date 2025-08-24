@@ -1,9 +1,9 @@
 # Todo
 
-- Change selectors and CSS based on URL matches
-- Add bookmark chat feature
+- Change selectors and CSS based on URL matches - DONE
+- Add bookmark chat feature -DONE
 - Close the menu after user clicked outside menu
-- Make it responsive
+- Make it responsive => should move when the window got smaller, like when a devtool is open
 - Fix the drag and drop
 - Improve the menu's css (highlight, layout)
 - Add highlight to the user's chat after scrolled

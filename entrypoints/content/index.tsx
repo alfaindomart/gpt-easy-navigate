@@ -1,14 +1,18 @@
 import ReactDOM from 'react-dom/client'
 import App from './App'
+import "../../assets/tailwind.css"
 
 export default defineContentScript({
   matches: ["*://chatgpt.com/*", "*://gemini.google.com/*"],
+  
+  cssInjectionMode: 'ui',
 
-  main(ctx) {
+  async main(ctx) {
   
 
     //handle Dynamic UI: https://wxt.dev/guide/essentials/content-scripts.html#mounting-ui-to-dynamic-element
-    const ui = createIntegratedUi(ctx, {
+    const ui = await createShadowRootUi(ctx, {
+      name: 'test-shadow',
       position: 'inline',
       anchor: 'body',
       onMount: (container) => {
