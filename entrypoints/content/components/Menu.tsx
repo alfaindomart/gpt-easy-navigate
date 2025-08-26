@@ -1,13 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, ReactElement } from "react";
 import { ChevronRight } from "lucide-react";
 import { SidebarContent } from "./SidebarContent";
 import { Config, siteConfig } from "../config";
+import useClickOutside from "../hooks/clickOutside";
 
 function OpenMenu() {
     const [isOpen, setIsOpen] = useState(false)
     const [currSite, setCurrSite] = useState<Config|null>(null)
     const [userQueries, setUserQueries] = useState<HTMLElement[]>([])
 
+    const refMenu = useRef<HTMLDivElement>(null) 
 
     const fetchQueries = (queriesSelector: string | undefined) => {
             
@@ -27,7 +29,10 @@ function OpenMenu() {
         }
 
 
-    useEffect(() => {
+    useEffect(() => {//fetch queries everytime menu is open or closed
+
+        if (isOpen) {
+
             const currHostname = window.location.hostname
 
             const key = Object.keys(siteConfig).find(key => siteConfig[key].hostname === currHostname)
@@ -41,24 +46,31 @@ function OpenMenu() {
             setCurrSite(siteConfig[key])
             console.log(currSite)
             fetchQueries(currSite?.selectors.userQueries)
+
+        } else {console.log('menu is closed')}
+
+
     }, [isOpen])
+
+    useClickOutside(refMenu, () => {setIsOpen(false)})
+
 
     // observeNewQuery()
 
 
     return (
-        <>
+        <div >
             <button onClick={() => setIsOpen(!isOpen)}>
-                {isOpen ? <ChevronRight className="rotate-90" /> : <ChevronRight />}
+                {isOpen ? <ChevronRight className="rotate-90" color="red" /> : <ChevronRight color="red" />}
             </button>
             <div className="h-height flex-col">
                 {isOpen && (
-                    <div style={{backgroundColor: 'var(--bg-elevated-secondary)'}} className="w-64">
+                    <div className="w-64 bg-white" ref={refMenu}>
                         <SidebarContent currSite={currSite} userQueries={userQueries}/>
                     </div>
                 )}
             </div>
-        </>
+        </div>
     )
 }
 

@@ -13,3 +13,4 @@
 - Add search function?
 - Add keyboard support?
 - Close the menu after user clicked a query -> could be an option
+- Add bookmark tab or popup to manage all bookmarks
