@@ -28,6 +28,17 @@ function OpenMenu() {
             console.log(userQueries)
         }
 
+    useEffect(() => {//fetch queries on the first page load
+        const currHostname = window.location.hostname
+
+        const key = Object.keys(siteConfig).find(key => siteConfig[key].hostname === currHostname)
+
+        if (!key) return
+
+         setCurrSite(siteConfig[key])
+         fetchQueries(currSite?.selectors.userQueries)
+    }, [])
+
 
     useEffect(() => {//fetch queries everytime menu is open or closed
 
