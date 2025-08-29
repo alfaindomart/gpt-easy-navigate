@@ -74,9 +74,9 @@ function OpenMenu() {
             <button onClick={() => setIsOpen(!isOpen)}>
                 {isOpen ? <ChevronRight className="rotate-90" color="red" /> : <ChevronRight color="red" />}
             </button>
-            <div className="h-height flex-col">
+            <div className="">
                 {isOpen && (
-                    <div className="w-64 bg-white" ref={refMenu}>
+                    <div className="w-64" ref={refMenu}>
                         <SidebarContent currSite={currSite} userQueries={userQueries}/>
                     </div>
                 )}
