@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, ReactElement } from "react";
+import { useState, useEffect, useRef, ReactElement, ChangeEventHandler } from "react";
 import { ChevronRight } from "lucide-react";
 import { SidebarContent } from "./SidebarContent";
 import { Config, siteConfig } from "../config";
@@ -8,6 +8,7 @@ function OpenMenu() {
     const [isOpen, setIsOpen] = useState(false)
     const [currSite, setCurrSite] = useState<Config|null>(null)
     const [userQueries, setUserQueries] = useState<HTMLElement[]>([])
+    const [keywords, setKeywords] = useState("")
 
     const refMenu = useRef<HTMLDivElement>(null) 
 
@@ -65,6 +66,11 @@ function OpenMenu() {
 
     useClickOutside(refMenu, () => {setIsOpen(false)})
 
+    function handleSearch(e: React.ChangeEvent<HTMLInputElement>) {
+        const getInput = e.target.value
+        setKeywords(getInput)
+    }
+
 
     // observeNewQuery()
 
@@ -74,9 +80,13 @@ function OpenMenu() {
             <button onClick={() => setIsOpen(!isOpen)}>
                 {isOpen ? <ChevronRight className="rotate-90" color="red" /> : <ChevronRight color="red" />}
             </button>
-            <div className="">
+            <div>
                 {isOpen && (
-                    <div className="w-64" ref={refMenu}>
+                    <div ref={refMenu} 
+                    className="resize h-80 w-80 min-h-60 min-w-48 overflow-auto flex flex-col p-5 m-3 rounded-r-2xl border-solid border-yellow-500 bg-slate-800 scrollbar-thumb-blue-800 scrollbar-thin scrollbar-track-sky-300">
+                        <div className="flex">
+                            <input type="text" value={keywords} onChange={handleSearch} placeholder="search here"/>
+                        </div>
                         <SidebarContent currSite={currSite} userQueries={userQueries}/>
                     </div>
                 )}

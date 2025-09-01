@@ -34,7 +34,7 @@ export default function Draggable ({children}: DraggableProps) {
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
-            className="fixed w-50 h-50 z-999"
+            className="fixed w-10 h-10 z-999 flex align-middle justify-center"
             style={{
                 left: position.x,
                 top: position.y,

@@ -80,21 +80,21 @@ export function SidebarContent ({currSite, userQueries}: Prop) {
         switch (currSite?.name) {
             case 'ChatGPT' : return (
                 //CHATGPT
-            <div className="h-80 overflow-auto flex flex-col bg-slate-800 border-b-green-950 border-solid scrollbar scrollbar-thumb-blue-800 scrollbar-track-sky-300">
-                {userQueries && userQueries.length > 0 ? userQueries.map((query) => (
-                    <div key={currSite.selectors.helper(query)}>
-                        <button onClick={() => query.scrollIntoView()} className="hover:bg-gray-800 border-t border-white-800" data-id={currSite.selectors.helper(query)}>
-                            <div className="border-solid text-sm text-white p-2">truncate({query.innerText})</div>
-                        </button>
-                        <button data-bookmark={saveChat} onClick={() => saveChat(query)}>
-                            {bookmarked.has(currSite.selectors.helper(query)) ? 
-                                 <Star size={18} color="yellow" fill="yellow"/> :
-                                 <Star size={18} color="yellow"/>
-                        }
-                        </button>
-                    </div>
-                )) : <p>Can't find any message</p>}
-            </div>
+                <div>
+                    {userQueries && userQueries.length > 0 ? userQueries.map((query) => (
+                        <div key={currSite.selectors.helper(query)} className="flex">
+                            <button onClick={() => query.scrollIntoView()} className="hover:bg-gray-800 border-t border-white-800" data-id={currSite.selectors.helper(query)}>
+                                <div className="border-solid text-sm text-white p-2">{truncate(query.innerText)}</div>
+                            </button>
+                            <button data-bookmark={saveChat} onClick={() => saveChat(query)}>
+                                {bookmarked.has(currSite.selectors.helper(query)) ? 
+                                    <Star size={18} color="yellow" fill="yellow"/> :
+                                    <Star size={18} color="yellow"/>
+                            }
+                            </button>
+                        </div>
+                    )) : <p>Can't find any message</p>}
+                </div>
             );
 
             case 'Gemini': return (
