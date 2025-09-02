@@ -13,6 +13,8 @@ interface Prop {
 export function SidebarContent ({currSite, userQueries}: Prop) {
 
     const [bookmarked, setBookmarked] = useState(new Map())
+    const [keywords, setKeywords] = useState("")
+    // const [filteredQueries, setFiltered] = useState(userQueries)
 
     useEffect(() => {
        const getSaveChats = async () => {//get SavedChats from sync storage after rendering for the first time
@@ -76,12 +78,19 @@ export function SidebarContent ({currSite, userQueries}: Prop) {
             console.log(updatedChats)
             await storage.setItem("sync:SavedChats", updatedChats)
         }
+
+
+
+        const filtered = (keywords === '') ? userQueries : userQueries.filter((query) => query.innerText.toLowerCase().includes(keywords.toLowerCase()))
         
         switch (currSite?.name) {
             case 'ChatGPT' : return (
                 //CHATGPT
                 <div>
-                    {userQueries && userQueries.length > 0 ? userQueries.map((query) => (
+                    <div>
+                        <input type="text" value={keywords} onChange={(e) => {setKeywords(e.target.value); console.log(keywords); console.log(filtered)}} placeholder="search here"/>
+                    </div>
+                    {filtered && filtered.length > 0 ? filtered.map((query) => (
                         <div key={currSite.selectors.helper(query)} className="flex">
                             <button onClick={() => query.scrollIntoView()} className="hover:bg-gray-800 border-t border-white-800" data-id={currSite.selectors.helper(query)}>
                                 <div className="border-solid text-sm text-white p-2">{truncate(query.innerText)}</div>

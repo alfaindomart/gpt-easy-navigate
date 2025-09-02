@@ -8,7 +8,8 @@ function OpenMenu() {
     const [isOpen, setIsOpen] = useState(false)
     const [currSite, setCurrSite] = useState<Config|null>(null)
     const [userQueries, setUserQueries] = useState<HTMLElement[]>([])
-    const [keywords, setKeywords] = useState("")
+    // const [keywords, setKeywords] = useState("")
+    // const [filteredQueries, setFiltered] = useState(userQueries)
 
     const refMenu = useRef<HTMLDivElement>(null) 
 
@@ -66,10 +67,16 @@ function OpenMenu() {
 
     useClickOutside(refMenu, () => {setIsOpen(false)})
 
-    function handleSearch(e: React.ChangeEvent<HTMLInputElement>) {
-        const getInput = e.target.value
-        setKeywords(getInput)
-    }
+    // function handleSearch(e: React.ChangeEvent<HTMLInputElement>) {
+    //     const getInput = e.target.value
+    //     setKeywords(getInput)
+
+    //     const filtering = userQueries.filter((query) => {
+    //         query.innerText.toLowerCase().includes(getInput.toLowerCase())
+    //     })
+
+    //     setFiltered(filtering)
+    // }
 
 
     // observeNewQuery()
@@ -84,9 +91,6 @@ function OpenMenu() {
                 {isOpen && (
                     <div ref={refMenu} 
                     className="resize h-80 w-80 min-h-60 min-w-48 overflow-auto flex flex-col p-5 m-3 rounded-r-2xl border-solid border-yellow-500 bg-slate-800 scrollbar-thumb-blue-800 scrollbar-thin scrollbar-track-sky-300">
-                        <div className="flex">
-                            <input type="text" value={keywords} onChange={handleSearch} placeholder="search here"/>
-                        </div>
                         <SidebarContent currSite={currSite} userQueries={userQueries}/>
                     </div>
                 )}
