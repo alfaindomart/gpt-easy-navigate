@@ -3,7 +3,7 @@ import { truncate } from "../utils"
 import { Config, Bookmark} from "../config"
 import { Star } from "lucide-react"
 import { storage } from "wxt/utils/storage"
-import useClickOutside from "../hooks/clickOutside"
+import Sort from "./Sort"
 
 interface Prop {
     currSite: Config | null
@@ -89,6 +89,9 @@ export function SidebarContent ({currSite, userQueries}: Prop) {
                 <div>
                     <div>
                         <input type="text" value={keywords} onChange={(e) => {setKeywords(e.target.value); console.log(keywords); console.log(filtered)}} placeholder="search here"/>
+                    </div>
+                    <div>
+                        <Sort />
                     </div>
                     {filtered && filtered.length > 0 ? filtered.map((query) => (
                         <div key={currSite.selectors.helper(query)} className="flex">
