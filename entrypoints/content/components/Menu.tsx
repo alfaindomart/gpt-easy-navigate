@@ -5,9 +5,11 @@ import { Config, siteConfig } from "../config";
 import useClickOutside from "../hooks/clickOutside";
 
 function OpenMenu() {
+    console.time('OpenMenu')
     const [isOpen, setIsOpen] = useState(false)
     const [currSite, setCurrSite] = useState<Config|null>(null)
     const [userQueries, setUserQueries] = useState<HTMLElement[]>([])
+
     // const [keywords, setKeywords] = useState("")
     // const [filteredQueries, setFiltered] = useState(userQueries)
 
@@ -19,15 +21,10 @@ function OpenMenu() {
                 console.log('param queriesSelector missing')
                 return
             }
-            console.log('getting user queries......')
-            console.log(currSite?.selectors.userQueries)
-            const queries = [...document.querySelectorAll(`${currSite?.selectors.userQueries}`)] as HTMLElement[]
 
-            console.log(queries)
+            const queries = [...document.querySelectorAll(`${currSite?.selectors.userQueries}`)] as HTMLElement[]
             
             setUserQueries(queries)
-
-            console.log(userQueries)
         }
 
     useEffect(() => {//fetch queries on the first page load
@@ -52,12 +49,11 @@ function OpenMenu() {
 
             if (!key) return
 
-            console.log(key) //output: the key of sitesConfig
+            console.log(key) //output: the key of sitesConfig, "chatgpt" "gemini"
 
             console.log(siteConfig[key])
 
             setCurrSite(siteConfig[key])
-            console.log(currSite)
             fetchQueries(currSite?.selectors.userQueries)
 
         } else {console.log('menu is closed')}
@@ -80,6 +76,8 @@ function OpenMenu() {
 
 
     // observeNewQuery()
+
+    console.timeEnd('OpenMenu')
 
 
     return (

@@ -8,9 +8,10 @@
 - Improve the menu's css (highlight, layout)
 - Add highlight to the user's chat after scrolled
 - Add a search filter - DONE
-- Add sort button
-- Add numbering to the chat history
+- Add a bookmarked-only filter - Done
+- Add sort button - Done
 - Add a way to view the full, untruncated query, either in the menu or through hover
+- Add numbering to the chat history
 - Add bookmark marker on the scrollbar
 - Add keyboard support?
 - Close the menu after user clicked a query -> could be an option
