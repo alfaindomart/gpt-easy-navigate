@@ -1,6 +1,8 @@
 import ReactDOM from 'react-dom/client'
+import React, {useRef} from 'react';
 import App from './App'
 import "../../assets/tailwind.css"
+import Draggable from 'react-draggable';
 
 export default defineContentScript({
   matches: ["*://chatgpt.com/*", "*://gemini.google.com/*"],
@@ -8,6 +10,8 @@ export default defineContentScript({
   cssInjectionMode: 'ui',
 
   async main(ctx) {
+
+
   
 
     //handle Dynamic UI: https://wxt.dev/guide/essentials/content-scripts.html#mounting-ui-to-dynamic-element
@@ -16,15 +20,15 @@ export default defineContentScript({
       position: 'inline',
       anchor: 'body',
       onMount: (container) => {
-
         console.log('trying to mount...')
 
         const app = document.createElement('div')
         container.append(app)
+        app.classList.add('z-50')
         
         const root = ReactDOM.createRoot(app);
         root.render(
-        <App />
+            <App/>
       )
         return root
       },

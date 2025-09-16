@@ -16,5 +16,6 @@
 - Add keyboard support?
 - Close the menu after user clicked a query -> could be an option
 - Add bookmark tab or popup to manage all bookmarks
+- Add theming?
 
 - In Gemini, not all chats are loaded at once. With the current implementation, the user has to click the top or bottom first, scroll to that position, close the menu, the reopen the menu to fetch the newly loaded chats. Maybe use mutation observer to detect new changes in the elmeent?

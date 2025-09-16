@@ -1,10 +1,13 @@
-import { useState, useEffect, useRef, ReactElement, ChangeEventHandler } from "react";
+import { useState, useEffect, useRef, ReactElement, ChangeEventHandler, Ref, RefObject } from "react";
 import { ChevronRight } from "lucide-react";
 import { SidebarContent } from "./SidebarContent";
 import { Config, siteConfig } from "../config";
 import useClickOutside from "../hooks/clickOutside";
+import Draggable from "react-draggable";
+
 
 function OpenMenu() {
+    const nodeRef = useRef(null)
     console.time('OpenMenu')
     const [isOpen, setIsOpen] = useState(false)
     const [currSite, setCurrSite] = useState<Config|null>(null)
@@ -37,7 +40,6 @@ function OpenMenu() {
          setCurrSite(siteConfig[key])
          fetchQueries(currSite?.selectors.userQueries)
     }, [])
-
 
     useEffect(() => {//fetch queries everytime menu is open or closed
 
@@ -81,19 +83,21 @@ function OpenMenu() {
 
 
     return (
-        <div >
-            <button onClick={() => setIsOpen(!isOpen)}>
-                {isOpen ? <ChevronRight className="rotate-90" color="red" /> : <ChevronRight color="red" />}
-            </button>
-            <div>
-                {isOpen && (
-                    <div ref={refMenu} 
-                    className="resize h-80 w-80 min-h-60 min-w-48 overflow-auto flex flex-col p-5 m-3 rounded-r-2xl border-solid border-yellow-500 bg-slate-800 scrollbar-thumb-blue-800 scrollbar-thin scrollbar-track-sky-300">
-                        <SidebarContent currSite={currSite} userQueries={userQueries}/>
-                    </div>
-                )}
+        <Draggable nodeRef={nodeRef}>
+            <div ref={nodeRef} className="h-10 w-10 absolute z-50">
+                <button onClick={() => setIsOpen(!isOpen)} className="z-40">
+                    {isOpen ? <ChevronRight className="rotate-90" color="red" /> : <ChevronRight color="red" />}
+                </button>
+                <div>
+                    {isOpen && (
+                        <div ref={refMenu} 
+                        className="resize h-80 w-80 min-h-60 min-w-48 overflow-auto flex flex-col p-5 m-3 rounded-r-2xl border-solid border-yellow-500 bg-slate-800 scrollbar-thumb-blue-800 scrollbar-thin scrollbar-track-sky-300">
+                            <SidebarContent currSite={currSite} userQueries={userQueries}/>
+                        </div>
+                    )}
+                </div>
             </div>
-        </div>
+        </Draggable>
     )
 }
 

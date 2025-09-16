@@ -1,13 +1,12 @@
 import OpenMenu from "./components/Menu"
-import Draggable from "./components/Draggable"
-
 const App = () => {
 
+
+
     return (
+
+            <OpenMenu/>
         
-        <Draggable> 
-            <OpenMenu />
-        </Draggable>
         // <OpenMenu />
     )
 }
