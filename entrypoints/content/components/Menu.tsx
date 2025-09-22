@@ -85,13 +85,13 @@ function OpenMenu() {
     return (
         <Draggable nodeRef={nodeRef}>
             <div ref={nodeRef} className="h-10 w-10 absolute z-50">
-                <button onClick={() => setIsOpen(!isOpen)} className="z-40">
+                <button onClick={() => setIsOpen(!isOpen)}>
                     {isOpen ? <ChevronRight className="rotate-90" color="red" /> : <ChevronRight color="red" />}
                 </button>
                 <div>
                     {isOpen && (
                         <div ref={refMenu} 
-                        className="resize h-80 w-80 min-h-60 min-w-48 overflow-auto flex flex-col p-5 m-3 rounded-r-2xl border-solid border-yellow-500 bg-slate-800 scrollbar-thumb-blue-800 scrollbar-thin scrollbar-track-sky-300">
+                        className="resize h-80 w-80 min-h-60 min-w-48 max-w-90 max-h-90 flex flex-col p-5 m-3 bg-gray-950 scrollbar-thumb-gray-500 scrollbar-thin scrollbar-track-gray-900">
                             <SidebarContent currSite={currSite} userQueries={userQueries}/>
                         </div>
                     )}
