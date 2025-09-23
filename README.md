@@ -4,10 +4,13 @@
 - Add bookmark chat feature -DONE
 - Close the menu after user clicked outside menu - DONE
 - Make it responsive => should move when the window got smaller, like when a devtool is open
-- Improve the menu's css (highlight, layout)
-- Add a way to view the full, untruncated query, either in the menu or through hover
 - Add bookmark tab or popup to manage all bookmarks
+- Change the default mount position
 - Change the arrow icon to something more noticeable
+- Fix the untruncated view behavior - DONE
+- Fix the resizeable - DONE
+- Improve the menu's css (highlight, layout) - Done
+- Add a way to view the full, untruncated query, either in the menu or through hover - Done
 - Fix the drag and drop - DONE
 - Add highlight to the user's chat after scrolled
 - Add a search filter - DONE

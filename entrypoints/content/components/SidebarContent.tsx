@@ -4,6 +4,7 @@ import Sort from "./Sort"
 import { useSortFilter } from "../hooks/useSortFilter"
 import { useBookmark } from "../hooks/useBookmark"
 import type { Config } from "../config"
+import { ChevronDownSquare } from "lucide-react"
 
 interface Prop {
     currSite: Config | null
@@ -36,7 +37,7 @@ export function SidebarContent({ currSite, userQueries }: Prop) {
     const queriesToRender = displayedQueries ?? []
 
     return (
-        <div className="flex h-full w-full flex-col text-white">
+        <div className="flex h-full w-full flex-col text-white resize">
             <div className="flex items-center gap-2 pb-3">
                 <input
                     className="min-w-0 flex-1 rounded-md border border-amber-50/40 bg-transparent px-2 py-1 text-sm placeholder:text-gray-400 focus:border-amber-200 focus:outline-none focus:ring-1 focus:ring-amber-200"
@@ -49,7 +50,7 @@ export function SidebarContent({ currSite, userQueries }: Prop) {
                     <Sort options={options} setOptions={setOptions} />
                 </div>
             </div>
-            <div className="flex-1 overflow-y-auto overflow-x-hidden space-y-2 pr-1">
+            <div className="flex-1 overflow-y-auto overflow-x-hidden space-y-2 pr-2 scrollbar-corner-amber-600 scrollbar-thumb-amber-500 scrollbar-thin scrollbar-track-amber-900">
                 {queriesToRender.length > 0 ? (
                     queriesToRender.map((query) => {
                         const queryKey = currSite.selectors.helper(query)
@@ -64,9 +65,10 @@ export function SidebarContent({ currSite, userQueries }: Prop) {
                                 <button
                                     type="button"
                                     onClick={() => query.scrollIntoView({ behavior: "smooth", block: "center" })}
-                                    className="flex-1 text-left"
+                                    className="flex-1 text-left mr-2 flex"
                                 >
-                                    <p className="line-clamp-2 break-words text-sm text-white transition-all group-hover:line-clamp-none">
+                                    <button className="peer mr-2 focus:fill-amber-50"><ChevronDownSquare size={18}/></button>
+                                    <p className="line-clamp-2 break-words text-sm text-white transition-all peer-hover:line-clamp-none peer-focus:line-clamp-none">
                                         {query.innerText}
                                     </p>
                                 </button>

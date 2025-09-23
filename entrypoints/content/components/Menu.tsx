@@ -91,7 +91,7 @@ function OpenMenu() {
                 <div>
                     {isOpen && (
                         <div ref={refMenu} 
-                        className="resize h-80 w-80 min-h-60 min-w-48 max-w-90 max-h-90 flex flex-col p-5 m-3 bg-gray-950 scrollbar-thumb-gray-500 scrollbar-thin scrollbar-track-gray-900">
+                        className="resize rounded-2xl overflow-auto h-80 w-80 min-h-60 min-w-48 max-w-90 max-h-90 flex flex-col p-5 pr-1 m-3 bg-gray-950">
                             <SidebarContent currSite={currSite} userQueries={userQueries}/>
                         </div>
                     )}

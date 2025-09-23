@@ -19,7 +19,7 @@ export default function DraggableItem({children}: DraggableProps) {
     return (
         <Draggable
             axis="both"
-            defaultPosition={{x:0, y:0}}
+            defaultPosition={{x:100, y:100}}
             scale={1}
         >
             {children}
