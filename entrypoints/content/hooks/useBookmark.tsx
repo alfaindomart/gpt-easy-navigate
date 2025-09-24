@@ -40,11 +40,22 @@ export function useBookmark(currSite: Config) {
 
     const saveChat = useCallback(async (query: HTMLElement) => { //if returning a function from custom hook, wrap in useCallback -> https://react.dev/reference/react/useCallback#optimizing-a-custom-hook
     
+                const createdAt = new Date()
+
                 const newSave: Bookmark = {
                     key: currSite?.selectors.helper(query),
                     chatUrl: window.location.href,
+                    title: currSite?.selectors.conversationTitle(),
                     previewChat: truncate(query.innerText),
-                    timeStamp: Date.now()
+                    timeStamp: createdAt.toLocaleString(undefined, {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        hour12: true,
+                    }),
                 }
     
                 const copyOfBookmark = new Map(bookmarked)  

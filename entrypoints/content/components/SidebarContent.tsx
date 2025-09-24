@@ -55,6 +55,7 @@ export function SidebarContent({ currSite, userQueries }: Prop) {
                     queriesToRender.map((query) => {
                         const queryKey = currSite.selectors.helper(query)
                         const isBookmarked = bookmarked.bookmarked.has(queryKey)
+                        
 
                         return (
                             <div

@@ -5,8 +5,9 @@
 - Close the menu after user clicked outside menu - DONE
 - Make it responsive => should move when the window got smaller, like when a devtool is open
 - Add bookmark tab or popup to manage all bookmarks
-- Change the default mount position
 - Change the arrow icon to something more noticeable
+- Prevent dragging when resizing
+- Change the default mount position - DONE
 - Fix the untruncated view behavior - DONE
 - Fix the resizeable - DONE
 - Improve the menu's css (highlight, layout) - Done

@@ -24,7 +24,7 @@ export const BookmarkManager = () => {
             {bookmarks.map((bookmark) => (
                 <div>
                     <div key={bookmark.key} className="p-2 m-2 border border-gray-600 rounded-lg">
-                        <p className="text-sm text-gray-300">Saved on: {bookmark.timeStamp.toLocaleString()}</p>
+                        <p className="text-sm text-gray-300">Saved on: {bookmark.timeStamp}</p>
                         <p className="text-md text-white">{bookmark.previewChat}</p>
                         <a href={bookmark.chatUrl} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">Go to chat</a>
                     </div>

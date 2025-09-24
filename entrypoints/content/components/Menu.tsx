@@ -84,7 +84,7 @@ function OpenMenu() {
 
     return (
         <Draggable nodeRef={nodeRef}>
-            <div ref={nodeRef} className="h-10 w-10 absolute z-50">
+            <div ref={nodeRef} className="h-10 w-10 absolute z-50 top-20 left-5">
                 <button onClick={() => setIsOpen(!isOpen)}>
                     {isOpen ? <ChevronRight className="rotate-90" color="red" /> : <ChevronRight color="red" />}
                 </button>
