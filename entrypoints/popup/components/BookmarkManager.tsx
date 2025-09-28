@@ -1,9 +1,15 @@
 import {useState, useEffect} from "react";
-import { Bookmark } from "@/entrypoints/content/config";
-import { Trash2 } from "lucide-react";
+import { Bookmark, GroupedBookmarks } from "@/entrypoints/content/config";
+import { Key, Trash2 } from "lucide-react";
+
+
 
 export const BookmarkManager = () => {
     const [bookmarks, setBookmarks] = useState([] as Array<Bookmark>);
+    const [activeSite, setActiveSite] = useState('');
+    const [activeTitle, setActiveTitle] = useState('');
+
+
 
     useEffect(() => {
         try {
@@ -17,20 +23,60 @@ export const BookmarkManager = () => {
                 console.log('no bookmarks found', err);
             }
             
-        }, [])
+    }, [])
 
+
+    const nestedBookmarks = useMemo(() => {
+        return bookmarks.reduce((acc, bookmark) => {
+            let siteName = 'Other';
+            
+            if (bookmark.chatUrl.includes('gemini')) {
+                siteName = 'Gemini'
+            }
+            if (bookmark.chatUrl.includes('chatgpt')) {
+                siteName = 'ChatGPT'
+            }
+            if (!acc[siteName]) {
+                acc[siteName] = {};
+            }
+            if (!acc[siteName][bookmark.title]) {
+                acc[siteName][bookmark.title] = []
+            };
+            acc[siteName][bookmark.title].push(bookmark);
+            return acc;
+            }, {} as GroupedBookmarks)
+        }
+    , [bookmarks]);
+        
         return (
-        <div>
-            {bookmarks.map((bookmark) => (
-                <div>
-                    <div key={bookmark.key} className="p-2 m-2 border border-gray-600 rounded-lg">
-                        <p className="text-sm text-gray-300">Saved on: {bookmark.timeStamp}</p>
-                        <p className="text-md text-white">{bookmark.previewChat}</p>
-                        <a href={bookmark.chatUrl} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">Go to chat</a>
+            <div>
+                {Object.keys(nestedBookmarks).map(siteName => (
+                    <div key={siteName}>
+                        <h2 onClick={() => setActiveSite(activeSite === siteName ? '' : siteName)} className="cursor-pointer text-xl font-bold my-2">{siteName}</h2>
+                            {activeSite === siteName && (
+                                <div>
+                                    {Object.keys(nestedBookmarks[siteName]).map(title => (
+                                        <div key={title}>
+                                            <h3 onClick={() => setActiveTitle(activeTitle === title ? '' : title)}>
+                                            {title} ({nestedBookmarks[siteName][title].length} bookmarks)
+                                            </h3>
+                                            {activeTitle === title && (
+                                                <div>
+                                                    {nestedBookmarks[siteName][title].map(bookmark => (
+                                                        <div key={bookmark.key}>
+                                                            <p>{bookmark.previewChat}</p>
+                                                            <a href={bookmark.chatUrl} target="_blank" rel="noopener noreferrer">Go to chat</a>
+                                                            <button><Trash2 /></button>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                     </div>
-                    <button><Trash2/></button>
-                </div>
-            ))}
-        </div>
+                ))}
+            </div>
         )
 }

@@ -16,19 +16,10 @@ export function useBookmark(currSite: Config) {
                 console.log('cant get SavedChats')
                 return
             }
-            
-            console.log('getSaveChats running...')
-
-            console.log(SavedChats)
 
             const mappedChats = new Map(SavedChats.map(savedChat => [savedChat.key, savedChat])) //change the SavedChats Array into a Map
 
             setBookmarked(mappedChats)
-
-            console.log(mappedChats)
-
-            console.log('getSaveChatss ending...')
-
         } catch(err) {
             console.log(err)
             }

@@ -19,6 +19,8 @@ export interface Bookmark {
     timeStamp: string
 }
 
+export type GroupedBookmarks = Record<string, Record<string, Bookmark[]>>
+
 //What is Record? https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type
 export const siteConfig: Record<string, Config>  = {
     "chatgpt": {
