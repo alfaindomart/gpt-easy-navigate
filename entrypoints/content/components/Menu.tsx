@@ -1,144 +1,124 @@
-import { useState, useEffect, useRef, ReactElement, ChangeEventHandler, Ref, RefObject } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChevronRight } from "lucide-react";
+import Draggable from "react-draggable";
 import { SidebarContent } from "./SidebarContent";
+import { BookmarkManager } from "./BookmarkManager";
 import { Config, siteConfig } from "../config";
 import useClickOutside from "../hooks/clickOutside";
-import Draggable from "react-draggable";
 
+type TabKey = "conversation" | "bookmarks";
+
+//note to self: codex refactored this component a bit. This is the same logic just different name.
+
+function resolveSiteFromHostname(): Config | null {
+    const { hostname } = window.location;
+    const key = Object.keys(siteConfig).find(
+        (siteKey) => siteConfig[siteKey].hostname === hostname,
+    );
+    return key ? siteConfig[key] : null;
+}
 
 function OpenMenu() {
-    const nodeRef = useRef(null)
-    console.time('OpenMenu')
-    const [isOpen, setIsOpen] = useState(false)
-    const [currSite, setCurrSite] = useState<Config|null>(null)
-    const [userQueries, setUserQueries] = useState<HTMLElement[]>([])
+    const nodeRef = useRef<HTMLDivElement | null>(null);
+    const refMenu = useRef<HTMLDivElement | null>(null);
+    const [isOpen, setIsOpen] = useState(false);
+    const [activeTab, setActiveTab] = useState<TabKey>("conversation");
+    const [currSite, setCurrSite] = useState<Config | null>(null);
+    const [userQueries, setUserQueries] = useState<HTMLElement[]>([]);
 
-    // const [keywords, setKeywords] = useState("")
-    // const [filteredQueries, setFiltered] = useState(userQueries)
+    const refreshSiteData = () => {
+        const nextSite = resolveSiteFromHostname();
+        setCurrSite(nextSite);
 
-    const refMenu = useRef<HTMLDivElement>(null) 
-
-    const fetchQueries = (queriesSelector: string | undefined) => {
-            
-            if (!queriesSelector) {
-                console.log('param queriesSelector missing')
-                return
-            }
-
-            const queries = [...document.querySelectorAll(`${currSite?.selectors.userQueries}`)] as HTMLElement[]
-            
-            setUserQueries(queries)
+        if (!nextSite) {
+            setUserQueries([]);
+            return;
         }
 
-    useEffect(() => {//fetch queries on the first page load
-        const currHostname = window.location.hostname
+        const queries = Array.from(
+            document.querySelectorAll<HTMLElement>(nextSite.selectors.userQueries),
+        );
+        setUserQueries(queries);
+    };
 
-        const key = Object.keys(siteConfig).find(key => siteConfig[key].hostname === currHostname)
+    useEffect(() => {//refresh site data on first load
+        refreshSiteData();
+    }, []);
 
-        if (!key) return
+    useEffect(() => {//refresh site data when menu is opened
+        if (!isOpen) return;
+        refreshSiteData();
+    }, [isOpen]);
 
-         setCurrSite(siteConfig[key])
-         fetchQueries(currSite?.selectors.userQueries)
-    }, [])
+    useClickOutside(refMenu, () => setIsOpen(false));
 
-    useEffect(() => {//fetch queries everytime menu is open or closed
-
-        if (isOpen) {
-
-            const currHostname = window.location.hostname
-
-            const key = Object.keys(siteConfig).find(key => siteConfig[key].hostname === currHostname)
-
-            if (!key) return
-
-            console.log(key) //output: the key of sitesConfig, "chatgpt" "gemini"
-
-            console.log(siteConfig[key])
-
-            setCurrSite(siteConfig[key])
-            fetchQueries(currSite?.selectors.userQueries)
-
-        } else {console.log('menu is closed')}
-
-
-    }, [isOpen])
-
-    useClickOutside(refMenu, () => {setIsOpen(false)})
-
-    // function handleSearch(e: React.ChangeEvent<HTMLInputElement>) {
-    //     const getInput = e.target.value
-    //     setKeywords(getInput)
-
-    //     const filtering = userQueries.filter((query) => {
-    //         query.innerText.toLowerCase().includes(getInput.toLowerCase())
-    //     })
-
-    //     setFiltered(filtering)
-    // }
-
-
-    // observeNewQuery()
-
-    console.timeEnd('OpenMenu')
-
+    const tabButtonClasses = (tab: TabKey) =>
+        [
+            "flex-1 rounded-md px-2 py-1 text-xs font-medium transition-colors",
+            activeTab === tab
+                ? "bg-amber-500/20 text-amber-200"
+                : "text-gray-400 hover:bg-white/5 hover:text-gray-200",
+        ].join(" ");
 
     return (
-        <Draggable nodeRef={nodeRef}>
-            <div ref={nodeRef} className="h-10 w-10 absolute z-50 top-20 left-20">
-                <button onClick={() => setIsOpen(!isOpen)}>
-                    {isOpen ? <ChevronRight className="rotate-90" color="red" /> : <ChevronRight color="red" />}
+        <Draggable nodeRef={nodeRef} cancel="div .resize">
+            <div ref={nodeRef} className="absolute left-20 top-20 z-50 h-10 w-10">
+                <button
+                    onClick={() =>
+                        setIsOpen((prev) => {
+                            const next = !prev;
+                            if (next) {
+                                setActiveTab("conversation");
+                            }
+                            return next;
+                        })
+                    }
+                    className="rounded-full bg-gray-900/80 p-2 text-red-500 shadow-lg transition hover:bg-gray-800"
+                    aria-expanded={isOpen}
+                    aria-label="Toggle assistant menu"
+                    type="button"
+                >
+                    <ChevronRight className={isOpen ? "rotate-90 transition" : "transition"} />
                 </button>
-                <div>
-                    {isOpen && (
-                        <div ref={refMenu} 
-                        className="resize rounded-2xl overflow-auto h-80 w-80 min-h-60 min-w-48 max-w-90 max-h-90 flex flex-col p-5 pr-1 m-3 bg-gray-950">
-                            <SidebarContent currSite={currSite} userQueries={userQueries}/>
+                {isOpen && (
+                    <div
+                        ref={refMenu}
+                        className="resize m-3 flex h-80 w-80 min-h-60 min-w-48 max-h-90 max-w-90 flex-col overflow-hidden rounded-2xl bg-gray-950/95 ring-1 ring-white/10 backdrop-blur"
+                    >
+                        <div className="flex items-center gap-2 border-b border-white/10 bg-gray-900/70 px-3 py-2">
+                            <button
+                                type="button"
+                                className={tabButtonClasses("conversation")}
+                                onClick={() => setActiveTab("conversation")}
+                            >
+                                Conversations ({userQueries.length})
+                            </button>
+                            <button
+                                type="button"
+                                className={tabButtonClasses("bookmarks")}
+                                onClick={() => setActiveTab("bookmarks")}
+                            >
+                                Bookmarks
+                            </button>
                         </div>
-                    )}
-                </div>
+                        <div className="flex-1 overflow-auto p-3 pr-1">
+                            {activeTab === "conversation" ? (
+                                currSite ? (
+                                    <SidebarContent currSite={currSite} userQueries={userQueries} />
+                                ) : (
+                                    <div className="flex h-full items-center justify-center rounded-lg border border-dashed border-white/10 bg-white/5 p-4 text-center text-sm text-gray-300">
+                                        This site is not supported yet.
+                                    </div>
+                                )
+                            ) : (
+                                <BookmarkManager isActive={activeTab === "bookmarks"} />
+                            )}
+                        </div>
+                    </div>
+                )}
             </div>
         </Draggable>
-    )
+    );
 }
 
-
-/* Todo: use MutationObserver to update the sidebar automatically
-
-function debounce<T extends unknown []>(fn: (...args: T) => void, delay: number) {
-  let timeout: ReturnType<typeof setTimeout>;
-
-  return (...args: T) => {
-    clearTimeout(timeout); // cancel the previous scheduled call
-    timeout = setTimeout(() => {fn.call(null, ...args)}, delay);
-  };
-}
-
-function observeNewQuery() {
-
-    useEffect(() => {
-
-    const target = document.getElementById('thread')
-    if (!target) return
-        
-    const config = {childList: true, subtree: true };
-
-    const callback = (mutationLists: MutationRecord[], observer: MutationObserver) => {
-        if (!mutationLists) return
-        for (const mutation of mutationLists) {
-            if (mutation.type === "childList") {
-                console.log("A direct child has been added or removed")
-            } else console.log('nohting')
-            }
-        }
-            const observer = new MutationObserver(debounce(callback, 3000))
-
-                observer.observe(target, config)
-
-                    return () => {
-      observer.disconnect();
-    };
-}, [])
-    }
-*/
-
-export default OpenMenu
+export default OpenMenu;

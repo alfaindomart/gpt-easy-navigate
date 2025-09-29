@@ -9,7 +9,7 @@ type DraggableProps = {
 }
 
 
-export default function DraggableItem({children}: DraggableProps) {
+export default function DraggableItem({children}: DraggableProps, cancel: string) {
 
     const eventLogger = (e: MouseEvent, data: Object) => {
         console.log('Event: ', e)
@@ -21,6 +21,7 @@ export default function DraggableItem({children}: DraggableProps) {
             axis="both"
             defaultPosition={{x:100, y:100}}
             scale={1}
+            cancel={cancel}
         >
             {children}
         </Draggable>

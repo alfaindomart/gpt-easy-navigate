@@ -50,19 +50,19 @@ export const BookmarkManager = () => {
         
         return (
             <div>
-                {Object.keys(nestedBookmarks).map(siteName => (
+                {Object.keys(nestedBookmarks).map(siteName => (//level1: render hostname menu (ChatGPT, Gemini)
                     <div key={siteName}>
                         <h2 onClick={() => setActiveSite(activeSite === siteName ? '' : siteName)} className="cursor-pointer text-xl font-bold my-2">{siteName}</h2>
                             {activeSite === siteName && (
                                 <div>
-                                    {Object.keys(nestedBookmarks[siteName]).map(title => (
+                                    {Object.keys(nestedBookmarks[siteName]).map(title => (//level2: render conversation title menu from each site
                                         <div key={title}>
                                             <h3 onClick={() => setActiveTitle(activeTitle === title ? '' : title)}>
                                             {title} ({nestedBookmarks[siteName][title].length} bookmarks)
                                             </h3>
                                             {activeTitle === title && (
                                                 <div>
-                                                    {nestedBookmarks[siteName][title].map(bookmark => (
+                                                    {nestedBookmarks[siteName][title].map(bookmark => (//level3: render each bookmark under each conversation title
                                                         <div key={bookmark.key}>
                                                             <p>{bookmark.previewChat}</p>
                                                             <a href={bookmark.chatUrl} target="_blank" rel="noopener noreferrer">Go to chat</a>

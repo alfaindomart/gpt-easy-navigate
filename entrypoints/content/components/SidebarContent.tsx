@@ -4,7 +4,7 @@ import Sort from "./Sort"
 import { useSortFilter } from "../hooks/useSortFilter"
 import { useBookmark } from "../hooks/useBookmark"
 import type { Config } from "../config"
-import { ChevronDownSquare } from "lucide-react"
+import { ChevronDown } from "lucide-react"
 
 interface Prop {
     currSite: Config | null
@@ -17,11 +17,18 @@ export function SidebarContent({ currSite, userQueries }: Prop) {
         return null
     }
 
+    const [expandedChat, setExpandedChat] = useState(false)
     const [keywords, setKeywords] = useState("")
     const [options, setOptions] = useState({
         filterSaved: false,
         sortFromNew: false,
     })
+
+    // const toggleExpanded = useCallback(() => {
+    //     setExpandedChat((prev) => {
+            
+    //     })
+    // })
 
     const bookmarked = useBookmark(currSite)
 
@@ -55,7 +62,7 @@ export function SidebarContent({ currSite, userQueries }: Prop) {
                     queriesToRender.map((query) => {
                         const queryKey = currSite.selectors.helper(query)
                         const isBookmarked = bookmarked.bookmarked.has(queryKey)
-                        
+
 
                         return (
                             <div
@@ -63,16 +70,12 @@ export function SidebarContent({ currSite, userQueries }: Prop) {
                                 className="group flex items-start gap-3 rounded-md border border-white/10 bg-white/5 p-2 transition-colors hover:bg-white/10"
                                 data-id={queryKey}
                             >
-                                <button
-                                    type="button"
-                                    onClick={() => query.scrollIntoView({ behavior: "smooth", block: "center" })}
-                                    className="flex-1 text-left mr-2 flex"
-                                >
-                                    <button className="peer mr-2 focus:fill-amber-50"><ChevronDownSquare size={18}/></button>
-                                    <p className="line-clamp-2 break-words text-sm text-white transition-all peer-hover:line-clamp-none peer-focus:line-clamp-none">
+                                <div className="flex-1 mr-2 flex">
+                                    <button className="peer mr-2 hover:outline-amber-50 hover:outline-1 hover:outline-offset-1 focus:outline-1 focus:outline-offset-1 peer"><ChevronDown size={14}/></button>
+                                    <button type="button" className="text-left bg-transparent line-clamp-2 break-words text-sm text-white transition-all peer-focus:line-clamp-none" onClick={() => query.scrollIntoView({ behavior: "smooth", block: "center" })}>
                                         {query.innerText}
-                                    </p>
-                                </button>
+                                    </button>
+                                </div>
                                 <button
                                     type="button"
                                     onClick={() => bookmarked.saveChat(query)}

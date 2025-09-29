@@ -1,4 +1,3 @@
-
 export interface Config {
     name: string
     url: string //for extension matches
@@ -7,7 +6,7 @@ export interface Config {
         userQueries: string
         userQuery: (id: string) => Element | null
         helper: (queryElement: HTMLElement) => string | null | undefined //helper selector for when userQuery is sufficient
-        conversationTitle: () => string
+        conversationTitle: () => string | null
     }
 }
 
@@ -47,3 +46,4 @@ export const siteConfig: Record<string, Config>  = {
         }
     }
 }
+
