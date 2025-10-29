@@ -1,3 +1,4 @@
+//note to self: codex refactored this component a bit. This is the same logic as your code, mostly just different name.
 import { useEffect, useRef, useState } from "react";
 import { ChevronRight } from "lucide-react";
 import Draggable from "react-draggable";
@@ -6,9 +7,8 @@ import { BookmarkManager } from "./BookmarkManager";
 import { Config, siteConfig } from "../config";
 import useClickOutside from "../hooks/clickOutside";
 
-type TabKey = "conversation" | "bookmarks";
+type TabKey = "conversation" | "bookmarks" | "AI Responses";
 
-//note to self: codex refactored this component a bit. This is the same logic just different name.
 
 function resolveSiteFromHostname(): Config | null {
     const { hostname } = window.location;
@@ -25,6 +25,7 @@ function OpenMenu() {
     const [activeTab, setActiveTab] = useState<TabKey>("conversation");
     const [currSite, setCurrSite] = useState<Config | null>(null);
     const [userQueries, setUserQueries] = useState<HTMLElement[]>([]);
+    const [aiResponses, setAIResponses] = useState<HTMLElement[]>([]);
 
     const refreshSiteData = () => {
         const nextSite = resolveSiteFromHostname();
@@ -39,6 +40,11 @@ function OpenMenu() {
             document.querySelectorAll<HTMLElement>(nextSite.selectors.userQueries),
         );
         setUserQueries(queries);
+
+        const responses = Array.from(
+            document.querySelectorAll<HTMLElement>(nextSite.selectors.aiResponses ?? "")
+        )
+        setAIResponses(responses);
     };
 
     useEffect(() => {//refresh site data on first load
@@ -99,6 +105,9 @@ function OpenMenu() {
                                 onClick={() => setActiveTab("bookmarks")}
                             >
                                 Bookmarks
+                            </button>
+                            <button type="button" className={tabButtonClasses("AI Responses")} onClick={() => setActiveTab("AI Responses")}>
+                                AI Responses ({aiResponses.length})
                             </button>
                         </div>
                         <div className="flex-1 overflow-auto p-3 pr-1">

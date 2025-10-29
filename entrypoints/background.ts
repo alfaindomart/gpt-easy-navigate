@@ -1,4 +1,8 @@
 export default defineBackground(() => {
-  console.log('Hello background!', { id: browser.runtime.id });
-  
+  browser.contextMenus.create({
+    id: 'test context',
+    title: 'WXT context menu',
+    "type": "normal",
+    contexts: ["selection"]
+  })
 });

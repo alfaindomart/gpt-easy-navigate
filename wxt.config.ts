@@ -7,7 +7,7 @@ export default defineConfig({
     plugins: [tailwindcss()],
   }),
     manifest: {
-    permissions: ["scripting", "storage"],
+    permissions: ["scripting", "storage", "contextMenus"],
     host_permissions: ["*://chatgpt.com/c/*, *://*.google.com/*"],
   },
   modules: ['@wxt-dev/module-react']

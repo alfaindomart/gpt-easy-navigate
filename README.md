@@ -5,12 +5,17 @@
 - Close the menu after user clicked outside menu - DONE
 - Add bookmark tab or popup to manage all bookmarks - DONE
 - Make it responsive => should move when the window got smaller, like when a devtool is open
+- add text fragment to bookmark
+- add all media in a chat tab
+- add all code sections in a chat tab
+- add AI responses in tab
+- add selection-based bookmark utilizing text fragment
 - Change the arrow icon to something more noticeable
-- Prevent dragging when resizing
+- Prevent dragging when resizing - Done
 - Add highlight to the user's chat after scrolled
-- Add numbering to the chat history
+- Add numbering to the chat history - DONE
 - Add bookmark marker on the scrollbar
-- Add keyboard support?
+- Add keyboard support (open with shortcut, navigate with arrow keys)
 - Add theming?
 - Pin the menu option
 - Close the menu after user clicked a query -> could be an option

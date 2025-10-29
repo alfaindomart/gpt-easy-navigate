@@ -7,6 +7,7 @@ export interface Config {
         userQuery: (id: string) => Element | null
         helper: (queryElement: HTMLElement) => string | null | undefined //helper selector for when userQuery is sufficient
         conversationTitle: () => string | null
+        aiResponses?: string
     }
 }
 
@@ -30,7 +31,8 @@ export const siteConfig: Record<string, Config>  = {
             userQueries: "[data-message-author-role='user']",
             userQuery: (queryId) => document.querySelector(`div [data-message-id="${queryId}"]`),
             helper: (queryElement) => queryElement.dataset.messageId,
-            conversationTitle: () => document.title
+            conversationTitle: () => document.title,
+            aiResponses: "[data-message-author-role='assistant']"
         }
     },
 
@@ -42,7 +44,8 @@ export const siteConfig: Record<string, Config>  = {
             userQueries: "span.user-query-bubble-with-background" ,
             userQuery: (queryId) => document.getElementById(`${queryId}`),
             helper: (queryElement) => queryElement.closest('.conversation-container')?.getAttribute('id'),
-            conversationTitle: () => document.getElementsByClassName('conversation-title gds-label-l')[0]?.textContent
+            conversationTitle: () => document.getElementsByClassName('conversation-title gds-label-l')[0]?.textContent,
+            aiResponses: "model-response-text"
         }
     }
 }
