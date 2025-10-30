@@ -4,22 +4,8 @@
 - Add bookmark chat feature -DONE
 - Close the menu after user clicked outside menu - DONE
 - Add bookmark tab or popup to manage all bookmarks - DONE
-- Make it responsive => should move when the window got smaller, like when a devtool is open
-- add text fragment to bookmark
-- add all media in a chat tab
-- add all code sections in a chat tab
-- add AI responses in tab
-- add selection-based bookmark utilizing text fragment
-- Change the arrow icon to something more noticeable
 - Prevent dragging when resizing - Done
-- Add highlight to the user's chat after scrolled
 - Add numbering to the chat history - DONE
-- Add bookmark marker on the scrollbar
-- Add keyboard support (open with shortcut, navigate with arrow keys)
-- Add theming?
-- Pin the menu option
-- Close the menu after user clicked a query -> could be an option
-- Highlight searched keyword
 - Change the default mount position - DONE
 - Fix the untruncated view behavior - DONE
 - Fix the resizeable - DONE
@@ -30,5 +16,19 @@
 - Add a bookmarked-only filter - Done
 - Add sort button - Done
 - Replace timestamp in bookmark with date - DONE
+- Make it responsive => should move when the window got smaller, like when a devtool is open
+- add text fragment to bookmark
+- add all media in a chat tab
+- add all code sections in a chat tab
+- add AI responses in tab
+- add selection-based bookmark utilizing text fragment
+- Change the arrow icon to something more noticeable
+- Add bookmark marker on the scrollbar
+- Add keyboard support (open with shortcut, navigate with arrow keys)
+- Add theming?
+- Pin the menu option
+- Close the menu after user clicked a query -> could be an option
+- Add highlight to the user's chat after scrolled
+- Highlight searched keyword
 
 - In Gemini, not all chats are loaded at once. With the current implementation, the user has to click the top or bottom first, scroll to that position, close the menu, the reopen the menu to fetch the newly loaded chats. Maybe use mutation observer to detect new changes in the elmeent?

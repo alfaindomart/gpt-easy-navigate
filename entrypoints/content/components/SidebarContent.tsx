@@ -38,7 +38,7 @@ export function SidebarContent({ currSite, userQueries }: Prop) {
         options.filterSaved,
         options.sortFromNew,
         bookmarked.bookmarked,
-        currSite,
+        currSite
     )
 
     const queriesToRender = displayedQueries ?? []

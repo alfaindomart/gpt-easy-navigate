@@ -7,7 +7,7 @@ export interface Config {
         userQuery: (id: string) => Element | null
         helper: (queryElement: HTMLElement) => string | null | undefined //helper selector for when userQuery is sufficient
         conversationTitle: () => string | null
-        aiResponses?: string
+        aiResponses: string
     }
 }
 

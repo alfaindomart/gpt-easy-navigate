@@ -119,9 +119,9 @@ function OpenMenu() {
                                         This site is not supported yet.
                                     </div>
                                 )
-                            ) : (
+                            ) : activeTab === "bookmarks" ? (
                                 <BookmarkManager isActive={activeTab === "bookmarks"} />
-                            )}
+                            ) : (<SidebarContent currSite={currSite} userQueries={aiResponses} />)}
                         </div>
                     </div>
                 )}
