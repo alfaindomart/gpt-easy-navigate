@@ -45,7 +45,7 @@ export const siteConfig: Record<string, Config>  = {
             userQuery: (queryId) => document.getElementById(`${queryId}`),
             helper: (queryElement) => queryElement.closest('.conversation-container')?.getAttribute('id'),
             conversationTitle: () => document.getElementsByClassName('conversation-title gds-label-l')[0]?.textContent,
-            aiResponses: "model-response-text"
+            aiResponses: ".model-response-text"
         }
     }
 }
