@@ -5,6 +5,7 @@ import { useSortFilter } from "../hooks/useSortFilter"
 import { useBookmark } from "../hooks/useBookmark"
 import type { Config } from "../config"
 import { ChevronDown } from "lucide-react"
+import { truncate } from "../utils"
 
 interface Prop {
     currSite: Config | null
@@ -72,8 +73,8 @@ export function SidebarContent({ currSite, userQueries }: Prop) {
                             >
                                 <div className="flex-1 mr-2 flex">
                                     <button className="peer mr-2 hover:outline-amber-50 hover:outline-1 hover:outline-offset-1 focus:outline-1 focus:outline-offset-1 peer"><ChevronDown size={14}/></button>
-                                    <button type="button" className="text-left bg-transparent line-clamp-2 break-words text-sm text-white transition-all peer-focus:line-clamp-none" onClick={() => query.scrollIntoView({ behavior: "smooth", block: "center" })}>
-                                        {query.innerText}
+                                    <button type="button" className="text-left bg-transparent line-clamp-2 break-words text-sm text-white transition-all peer-focus:line-clamp-none whitespace-pre-wrap" onClick={() => query.scrollIntoView({ behavior: "smooth", block: "center" })}>
+                                        {(query.textContent.length > 5000) ? truncate(query.textContent) + "..." : query.textContent}
                                     </button>
                                 </div>
                                 <button

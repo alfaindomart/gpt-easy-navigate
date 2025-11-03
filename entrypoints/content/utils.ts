@@ -1,7 +1,7 @@
 import { options } from "./components/Sort"
 import { Bookmark } from "./config"
 export function truncate(queryContent: string) {
-    const truncated = queryContent.slice(0, 100)
+    const truncated = queryContent.slice(0, 200)
     return truncated
 }
 

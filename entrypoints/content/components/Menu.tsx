@@ -89,7 +89,7 @@ function OpenMenu() {
                 {isOpen && (
                     <div
                         ref={refMenu}
-                        className="resize m-3 flex h-80 w-80 min-h-60 min-w-48 max-h-90 max-w-90 flex-col overflow-hidden rounded-2xl bg-gray-950/95 ring-1 ring-white/10 backdrop-blur"
+                        className="resize m-3 flex h-80 w-80 min-h-60 min-w-48 max-h-120 max-w-120 flex-col overflow-hidden rounded-2xl bg-gray-950/95 ring-1 ring-white/10 backdrop-blur"
                     >
                         <div className="flex items-center gap-2 border-b border-white/10 bg-gray-900/70 px-3 py-2">
                             <button
@@ -106,7 +106,7 @@ function OpenMenu() {
                             >
                                 Bookmarks
                             </button>
-                            <button type="button" className={tabButtonClasses("AI Responses")} onClick={() => setActiveTab("AI Responses")}>
+                            <button type="button" className={tabButtonClasses("AI Responses")} onClick={() => {setActiveTab("AI Responses"); console.log(aiResponses[0].innerText)}}>
                                 AI Responses ({aiResponses.length})
                             </button>
                         </div>
