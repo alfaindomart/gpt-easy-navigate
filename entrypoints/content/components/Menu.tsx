@@ -26,6 +26,9 @@ function OpenMenu() {
     const [currSite, setCurrSite] = useState<Config | null>(null);
     const [userQueries, setUserQueries] = useState<HTMLElement[]>([]);
     const [aiResponses, setAIResponses] = useState<HTMLElement[]>([]);
+    const [menuSize, setMenuSize] = useState<{ width: number; height: number }>(
+        { width: 320, height: 320 }, // default matches w-80 h-80
+    );
 
     const refreshSiteData = () => {
         const nextSite = resolveSiteFromHostname();
@@ -58,6 +61,27 @@ function OpenMenu() {
 
     useClickOutside(refMenu, () => setIsOpen(false));
 
+    // Track size changes of the resizable menu so width/height persist across close/open
+    useEffect(() => {
+        if (!isOpen) return; // only observe when mounted
+        const el = refMenu.current;
+        if (!el) return;
+        // Apply the last known size immediately
+        el.style.width = `${menuSize.width}px`;
+        el.style.height = `${menuSize.height}px`;
+
+        const ro = new ResizeObserver((entries) => {
+            const entry = entries[0];
+            if (!entry) return;
+            const { width, height } = entry.contentRect;
+            setMenuSize({ width: Math.round(width), height: Math.round(height) });
+        });
+        ro.observe(el);
+        return () => {
+            ro.disconnect();
+        };
+    }, [isOpen]);
+
     const tabButtonClasses = (tab: TabKey) =>
         [
             "flex-1 rounded-md px-2 py-1 text-xs font-medium transition-colors",
@@ -89,7 +113,8 @@ function OpenMenu() {
                 {isOpen && (
                     <div
                         ref={refMenu}
-                        className="resize m-3 flex h-80 w-80 min-h-60 min-w-48 max-h-120 max-w-120 flex-col overflow-hidden rounded-2xl bg-gray-950/95 ring-1 ring-white/10 backdrop-blur"
+                        style={{ width: menuSize.width, height: menuSize.height }}
+                        className="resize m-3 flex min-h-60 min-w-48 max-h-120 max-w-120 flex-col overflow-hidden rounded-2xl bg-gray-950/95 ring-1 ring-white/10 backdrop-blur"
                     >
                         <div className="flex items-center gap-2 border-b border-white/10 bg-gray-900/70 px-3 py-2">
                             <button
