@@ -16,14 +16,6 @@
     }
   },
   "files": {
-    "ignore": [
-      "node_modules",
-      ".output",
-      "dist",
-      "build",
-      ".wxt",
-      "public"
-    ]
+    "ignore": ["node_modules", ".output", "dist", "build", ".wxt", "public", "assets"]
   }
 }
-

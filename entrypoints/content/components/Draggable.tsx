@@ -1,31 +1,23 @@
 import Draggable from "react-draggable";
 import React from "react";
-import type {DraggableEvent, DraggableData} from 'react-draggable'
+import type { DraggableEvent, DraggableData } from "react-draggable";
 import { ReactNode } from "react";
 
-
 type DraggableProps = {
-    children: ReactNode
-}
+  children: ReactNode;
+};
 
+export default function DraggableItem({ children }: DraggableProps, cancel: string) {
+  const eventLogger = (e: MouseEvent, data: Object) => {
+    console.log("Event: ", e);
+    console.log("Data: ", e);
+  };
 
-export default function DraggableItem({children}: DraggableProps, cancel: string) {
-
-    const eventLogger = (e: MouseEvent, data: Object) => {
-        console.log('Event: ', e)
-        console.log('Data: ', e)
-    }
-
-    return (
-        <Draggable
-            axis="both"
-            defaultPosition={{x:100, y:100}}
-            scale={1}
-            cancel={cancel}
-        >
-            {children}
-        </Draggable>
-    )
+  return (
+    <Draggable axis="both" defaultPosition={{ x: 100, y: 100 }} scale={1} cancel={cancel}>
+      {children}
+    </Draggable>
+  );
 }
 // class App extends React.Component {
 
@@ -56,9 +48,6 @@ export default function DraggableItem({children}: DraggableProps, cancel: string
 // }
 
 // ReactDOM.render(<App />, document.body)
-
-
-
 
 // export default function Draggable ({children}: DraggableProps) {
 //     const [position, setPosition] = useState({x: 600, y: 50})

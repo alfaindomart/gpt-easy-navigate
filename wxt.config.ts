@@ -1,14 +1,14 @@
-import tailwindcss from '@tailwindcss/vite';
-import { defineConfig } from 'wxt';
+import tailwindcss from "@tailwindcss/vite";
+import { defineConfig } from "wxt";
 
 // See https://wxt.dev/api/config.html
 export default defineConfig({
-    vite: () => ({
+  vite: () => ({
     plugins: [tailwindcss()],
   }),
-    manifest: {
+  manifest: {
     permissions: ["scripting", "storage", "contextMenus"],
     host_permissions: ["*://chatgpt.com/c/*, *://*.google.com/*"],
   },
-  modules: ['@wxt-dev/module-react']
+  modules: ["@wxt-dev/module-react"],
 });

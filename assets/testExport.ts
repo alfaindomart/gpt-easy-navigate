@@ -1,3 +1,3 @@
 export type TesterExport = {
-    test: string
-}
+  test: string;
+};

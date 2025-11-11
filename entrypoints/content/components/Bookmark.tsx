@@ -9,12 +9,11 @@ import { Star } from "lucide-react";
 //if found, add a bookmark icon to the queries
 
 const Bookmark = () => {
+  return (
+    <div className="starWrapper">
+      <Star />
+    </div>
+  );
+};
 
-    return ( 
-        <div className="starWrapper">
-            <Star />
-        </div>
-    )
-}
-
-export default Bookmark
+export default Bookmark;
