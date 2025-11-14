@@ -4,6 +4,7 @@ const Arrow = () => {
   return (
     <div className="arrowWrapper">
       <ChevronRight />
+      
     </div>
   );
 };

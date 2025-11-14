@@ -6,8 +6,10 @@ import { SidebarContent } from "./SidebarContent";
 import { BookmarkManager } from "./BookmarkManager";
 import { Config, siteConfig } from "../config";
 import useClickOutside from "../hooks/clickOutside";
+import { TriangleIcon } from "@/assets/CustomIcons";
 
 type TabKey = "conversation" | "bookmarks" | "AI Responses";
+
 
 function resolveSiteFromHostname(): Config | null {
   const { hostname } = window.location;
@@ -107,7 +109,8 @@ function OpenMenu() {
           aria-label="Toggle assistant menu"
           type="button"
         >
-          <ChevronRight className={isOpen ? "rotate-90 transition" : "transition"} />
+          {/* <ChevronRight className={isOpen ? "rotate-90 transition" : "transition"} /> */}
+          <TriangleIcon fill="currentColor" viewBox="0 0 800 800" size="14" className={isOpen ? "rotate-90 transition" : "transition"}/>
         </button>
         {isOpen && (
           <div
