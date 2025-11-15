@@ -18,8 +18,10 @@
 - Replace timestamp in bookmark with date - DONE
 - add AI responses in tab - DONE
 - add layou formatting - DONE
+- remember resized resized window after closing - DONE
 - Make it responsive => should move when the window got smaller, like when a devtool is open
-- add text fragment to bookmark
+- The menu tab bar should scroll horizontally when the window get smaller
+- add save by text fragment to bookmark
 - add all media in a chat tab
 - add all code sections in a chat tab
 - add selection-based bookmark utilizing text fragment
@@ -31,7 +33,7 @@
 - Close the menu after user clicked a query -> could be an option
 - Add highlight to the user's chat after scrolled
 - Highlight searched keyword
-- remember resized resized window after closing
+- SidebarContent layout will break if
 
 - In Gemini, not all chats are loaded at once. With the current implementation, the user has to click the top or bottom first, scroll to that position, close the menu, the reopen the menu to fetch the newly loaded chats. Maybe use mutation observer to detect new changes in the elmeent?
 

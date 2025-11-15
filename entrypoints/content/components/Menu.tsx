@@ -104,15 +104,15 @@ function OpenMenu() {
               return next;
             })
           }
-          className="rounded-full bg-gray-900/80 p-2 text-red-500 shadow-lg transition hover:bg-gray-800"
+          className={`triangle-toggle rounded-full ${isOpen? "bg-amber-700": "bg-gray-900/80"}  p-2 text-red-500 shadow-lg transition hover:bg-gray-800`}
           aria-expanded={isOpen}
           aria-label="Toggle assistant menu"
           type="button"
         >
           {/* <ChevronRight className={isOpen ? "rotate-90 transition" : "transition"} /> */}
-          <div className="flex flex-col m-1">
-            <TriangleIcon fill="black" viewBox="0 0 800 800" size="14" className={isOpen ? "black" : "red"}/>
-            <TriangleIcon fill="black" viewBox="0 0 800 800" size="14" className={isOpen ? "rotate-180 black" : "rotate-180 red"}/>
+          <div className={isOpen ? "hidden" : "flex flex-col m-1"}>
+            <TriangleIcon fill="black" viewBox="0 0 800 800" size="14" className="triangle-top"/>
+            <TriangleIcon fill="black" viewBox="0 0 800 800" size="14" className="rotate-180 triangle-bottom"/>
           </div>
         </button>
         {isOpen && (
