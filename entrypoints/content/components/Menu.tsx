@@ -110,7 +110,10 @@ function OpenMenu() {
           type="button"
         >
           {/* <ChevronRight className={isOpen ? "rotate-90 transition" : "transition"} /> */}
-          <TriangleIcon fill="currentColor" viewBox="0 0 800 800" size="14" className={isOpen ? "rotate-90 transition" : "transition"}/>
+          <div className="flex flex-col m-1">
+            <TriangleIcon fill="black" viewBox="0 0 800 800" size="14" className={isOpen ? "black" : "red"}/>
+            <TriangleIcon fill="black" viewBox="0 0 800 800" size="14" className={isOpen ? "rotate-180 black" : "rotate-180 red"}/>
+          </div>
         </button>
         {isOpen && (
           <div

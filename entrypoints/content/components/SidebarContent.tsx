@@ -76,7 +76,7 @@ export function SidebarContent({ currSite, userQueries }: Prop) {
                   </button>
                   <button
                     type="button"
-                    className="text-left bg-transparent line-clamp-2 break-words text-sm text-white transition-all peer-focus:line-clamp-none whitespace-pre-wrap"
+                    className="flex-1 w-full bg-transparent text-left line-clamp-2 break-words text-sm text-white transition-all whitespace-pre-wrap focus:outline-none peer-focus:line-clamp-none"
                     onClick={() => query.scrollIntoView({ behavior: "smooth", block: "center" })}
                   >
                     {query.textContent.length > 5000
