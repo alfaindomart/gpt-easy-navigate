@@ -14,7 +14,7 @@ export default function DraggableItem({ children }: DraggableProps, cancel: stri
   };
 
   return (
-    <Draggable axis="both" defaultPosition={{ x: 100, y: 100 }} scale={1} cancel={cancel}>
+    <Draggable axis="both" scale={1} cancel={cancel}>
       {children}
     </Draggable>
   );

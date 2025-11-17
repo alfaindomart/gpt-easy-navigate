@@ -93,7 +93,7 @@ function OpenMenu() {
 
   return (
     <Draggable nodeRef={nodeRef} cancel="div .resize">
-      <div ref={nodeRef} className="absolute left-20 top-20 z-50 h-10 w-10">
+      <div ref={nodeRef} className="absolute left-80 bottom-20 z-50 h-10 w-10">
         <button
           onClick={() =>
             setIsOpen((prev) => {

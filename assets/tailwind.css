@@ -12,10 +12,10 @@
     }
 
     .triangle-toggle:hover .triangle-top {
-        animation: triangle-top-flash 2.2s ease-in-out infinite;
+        animation: triangle-top-flash 1.8s ease-in-out infinite;
     }
 
     .triangle-toggle:hover .triangle-bottom {
-        animation: triangle-bottom-flash 2.2s ease-in-out infinite;
+        animation: triangle-bottom-flash 1.8s ease-in-out infinite;
     }
 }
