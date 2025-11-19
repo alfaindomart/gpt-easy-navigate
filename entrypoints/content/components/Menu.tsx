@@ -1,6 +1,7 @@
 //note to self: codex refactored this component a bit. This is the same logic as your code, mostly just different name.
 import { useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
+import { createPortal } from "react-dom";
 import { SidebarContent } from "./SidebarContent";
 import { BookmarkManager } from "./BookmarkManager";
 import { Config, siteConfig } from "../config";
@@ -27,8 +28,58 @@ function OpenMenu() {
   const [menuSize, setMenuSize] = useState<{ width: number; height: number }>(
     { width: 320, height: 320 }, // default matches w-80 h-80
   );
-  const [menuPosition, setMenuPosition] = useState<{ x: number; y: number }>({ x: 100, y: 100 });
-  const [menuDirection, setMenuDirection] = useState<{vertical: "up" | "down", horizontal: "left" | "right"}>({vertical: "down", horizontal: "right"})
+  const [triggerRect, setTriggerRect] = useState<{
+    top: number;
+    bottom: number;
+    left: number;
+    right: number;
+    width: number;
+    height: number;
+  } | null>(null);
+  const [menuDirection, setMenuDirection] = useState<{ vertical: "up" | "down"; horizontal: "left" | "right" }>({
+    vertical: "down",
+    horizontal: "right",
+  });
+
+  const determineMenuDirection = (rect: DOMRect | null) => {
+    if (!rect) return;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const needLeft = rect.left + menuSize.width + 16 > vw;
+    const needUp = rect.bottom + menuSize.height + 16 > vh;
+    setMenuDirection({
+      horizontal: needLeft ? "left" : "right",
+      vertical: needUp ? "up" : "down",
+    });
+  };
+
+  const updateTriggerRect = (rect: DOMRect) => {
+    const normalizedRect = {
+      top: rect.top,
+      bottom: rect.bottom,
+      left: rect.left,
+      right: rect.right,
+      width: rect.width,
+      height: rect.height,
+    };
+    setTriggerRect(normalizedRect);
+    determineMenuDirection(rect);
+  };
+
+  const menuStyle = {
+    width: menuSize.width,
+    height: menuSize.height,
+    top: triggerRect
+      ? menuDirection.vertical === "down"
+        ? triggerRect.bottom
+        : triggerRect.top - menuSize.height
+      : 0,
+    left: triggerRect
+      ? menuDirection.horizontal === "right"
+        ? triggerRect.left
+        : triggerRect.right - menuSize.width
+      : 0,
+  };
 
   const refreshSiteData = () => {
     const nextSite = resolveSiteFromHostname();
@@ -59,8 +110,6 @@ function OpenMenu() {
     //refresh site data when menu is opened
     if (!isOpen) return;
     refreshSiteData();
-    console.log()
-    
   }, [isOpen]);
 
   useClickOutside(refMenu, () => setIsOpen(false));
@@ -86,6 +135,13 @@ function OpenMenu() {
     };
   }, [isOpen]);
 
+  useEffect(() => {
+    if (!isOpen || !triggerRect) return;
+    determineMenuDirection(
+      new DOMRect(triggerRect.left, triggerRect.top, triggerRect.width, triggerRect.height),
+    );
+  }, [menuSize, isOpen, triggerRect]);
+
   const tabButtonClasses = (tab: TabKey) =>
     [
       "flex-1 rounded-md px-2 py-1 text-xs font-medium transition-colors",
@@ -94,21 +150,23 @@ function OpenMenu() {
         : "text-gray-400 hover:bg-white/5 hover:text-gray-200",
     ].join(" ");
 
+
   return (
-    <Draggable nodeRef={nodeRef} cancel="div .resize">
-      <div ref={nodeRef} className="absolute left-80 bottom-20 z-50 h-10 w-10">
-        <button onClick={(e) => 
-                  { const rect = e.currentTarget.getBoundingClientRect()
-                    setMenuPosition({x: rect.x, y: rect.y})
-                     setIsOpen((prev) => {
-                      const next = !prev;
-                        if (next) {
-                          setActiveTab("conversation");
-                        }
-                      return next;
-                      })
-}
-          }
+    <>
+      <Draggable nodeRef={nodeRef} cancel="div .resize">
+        <div ref={nodeRef} className="absolute left-80 bottom-20 z-50 h-10 w-10">
+          <button
+            onClick={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect();
+              updateTriggerRect(rect);
+              setIsOpen((prev) => {
+                const next = !prev;
+                if (next) {
+                  setActiveTab("conversation");
+                }
+                return next;
+              });
+            }}
           className={`triangle-toggle rounded-full ${isOpen? "bg-amber-700": "bg-gray-900/80"}  p-2 text-red-500 shadow-lg transition hover:bg-gray-800`}
           aria-expanded={isOpen}
           aria-label="Toggle assistant menu"
@@ -119,12 +177,16 @@ function OpenMenu() {
             <TriangleIcon fill="black" viewBox="0 0 800 800" size="14" className="triangle-top"/>
             <TriangleIcon fill="black" viewBox="0 0 800 800" size="14" className="rotate-180 triangle-bottom"/>
           </div>
-        </button>
-        {isOpen && (
+          </button>
+        </div>
+      </Draggable>
+      {isOpen &&
+        triggerRect &&
+        createPortal(
           <div
             ref={refMenu}
-            style={{ width: menuSize.width, height: menuSize.height }}
-            className="resize m-3 flex min-h-60 min-w-48 max-h-120 max-w-120 flex-col overflow-hidden rounded-2xl bg-gray-950/95 ring-1 ring-white/10 backdrop-blur"
+            style={menuStyle}
+            className="resize fixed flex min-h-60 flex-col overflow-hidden rounded-2xl bg-gray-950/95 ring-1 ring-white/10 backdrop-blur"
           >
             <div className="flex items-center gap-2 border-b border-white/10 bg-gray-900/70 px-3 py-2">
               <button
@@ -168,9 +230,8 @@ function OpenMenu() {
               )}
             </div>
           </div>
-        )}
-      </div>
-    </Draggable>
+        , document.body)}
+    </>
   );
 }
 
