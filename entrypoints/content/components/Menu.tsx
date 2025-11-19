@@ -1,6 +1,5 @@
 //note to self: codex refactored this component a bit. This is the same logic as your code, mostly just different name.
 import { useEffect, useRef, useState } from "react";
-import { ChevronRight } from "lucide-react";
 import Draggable from "react-draggable";
 import { SidebarContent } from "./SidebarContent";
 import { BookmarkManager } from "./BookmarkManager";
@@ -28,6 +27,8 @@ function OpenMenu() {
   const [menuSize, setMenuSize] = useState<{ width: number; height: number }>(
     { width: 320, height: 320 }, // default matches w-80 h-80
   );
+  const [menuPosition, setMenuPosition] = useState<{ x: number; y: number }>({ x: 100, y: 100 });
+  const [menuDirection, setMenuDirection] = useState<{vertical: "up" | "down", horizontal: "left" | "right"}>({vertical: "down", horizontal: "right"})
 
   const refreshSiteData = () => {
     const nextSite = resolveSiteFromHostname();
@@ -58,6 +59,8 @@ function OpenMenu() {
     //refresh site data when menu is opened
     if (!isOpen) return;
     refreshSiteData();
+    console.log()
+    
   }, [isOpen]);
 
   useClickOutside(refMenu, () => setIsOpen(false));
@@ -94,15 +97,17 @@ function OpenMenu() {
   return (
     <Draggable nodeRef={nodeRef} cancel="div .resize">
       <div ref={nodeRef} className="absolute left-80 bottom-20 z-50 h-10 w-10">
-        <button
-          onClick={() =>
-            setIsOpen((prev) => {
-              const next = !prev;
-              if (next) {
-                setActiveTab("conversation");
-              }
-              return next;
-            })
+        <button onClick={(e) => 
+                  { const rect = e.currentTarget.getBoundingClientRect()
+                    setMenuPosition({x: rect.x, y: rect.y})
+                     setIsOpen((prev) => {
+                      const next = !prev;
+                        if (next) {
+                          setActiveTab("conversation");
+                        }
+                      return next;
+                      })
+}
           }
           className={`triangle-toggle rounded-full ${isOpen? "bg-amber-700": "bg-gray-900/80"}  p-2 text-red-500 shadow-lg transition hover:bg-gray-800`}
           aria-expanded={isOpen}
