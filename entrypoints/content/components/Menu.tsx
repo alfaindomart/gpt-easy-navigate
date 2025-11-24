@@ -50,8 +50,8 @@ function OpenMenu() {
     if (!rect) return;
     const vw = window.innerWidth;
     const vh = window.innerHeight;
-    const needLeft = rect.left + menuSize.width + 16 > vw;
-    const needUp = rect.bottom + menuSize.height + 16 > vh;
+    const needLeft = rect.left + menuSize.width + 10 > vw;
+    const needUp = rect.bottom + menuSize.height + 10 > vh;
     setMenuDirection({
       horizontal: needLeft ? "left" : "right",
       vertical: needUp ? "up" : "down",
@@ -187,8 +187,8 @@ function OpenMenu() {
               });
             }}
             className={`triangle-toggle rounded-full ${
-              isOpen ? "bg-amber-700" : "bg-[#323061]"
-            }  p-2 text-red-500 shadow-lg transition ring-1 ring-cyan-900 hover:bg-gray-800 hover:ring-1 hover:ring-amber-500`}
+              isOpen ? "bg-[#ec5f01de] p-2" : "bg-[#284a99] p-1.25"
+            } shadow-lg transition ring-1 inset-ring-[rgb(38_81_211)] hover:bg-[#111144] hover:ring-2 hover:ring-[rgb(109_61_14_/_83%)]`}
             aria-expanded={isOpen}
             aria-label="Toggle assistant menu"
             type="button"
@@ -217,20 +217,13 @@ function OpenMenu() {
           style={menuStyle}
           className="resize fixed flex min-h-60 flex-col overflow-hidden rounded-2xl shadow-2xl bg-gray-800 ring-1 ring-black/20 z-50"
         >
-          <div className="flex items-center gap-2 border-b border-1 border-white/10 bg-amber-600 px-3 py-2">
+          <div className="flex items-center gap-2 border-b border-1 border-white/10 bg-[oklch(0.15_0.05_253.74)] px-3 py-3">
             <button
               type="button"
               className={tabButtonClasses("conversation")}
               onClick={() => setActiveTab("conversation")}
             >
-              Conversations ({userQueries.length})
-            </button>
-            <button
-              type="button"
-              className={tabButtonClasses("bookmarks")}
-              onClick={() => setActiveTab("bookmarks")}
-            >
-              Bookmarks
+              You ({userQueries.length})
             </button>
             <button
               type="button"
@@ -240,7 +233,14 @@ function OpenMenu() {
                 console.log(aiResponses[0].innerText);
               }}
             >
-              AI Responses ({aiResponses.length})
+              AI ({aiResponses.length})
+            </button>
+            <button
+              type="button"
+              className={tabButtonClasses("bookmarks")}
+              onClick={() => setActiveTab("bookmarks")}
+            >
+              Bookmarks
             </button>
           </div>
           <div className="flex-1 overflow-auto p-3 pr-1 bg-gray-900">

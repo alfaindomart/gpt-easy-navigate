@@ -58,7 +58,7 @@ export function SidebarContent({ currSite, userQueries }: Prop) {
           <Sort options={options} setOptions={setOptions} />
         </div>
       </div>
-      <div className="flex-1 m-2 overflow-y-auto overflow-x-hidden space-y-2 pr-2 scrollbar-corner-amber-600 scrollbar-thumb-amber-500 scrollbar-thin scrollbar-track-amber-900">
+      <div className="flex-1 overflow-y-auto overflow-x-hidden space-y-2 pr-1 scrollbar-corner-cyan-950 scrollbar-thumb-cyan-900 scrollbar-thin scrollbar-track-indigo-950">
         {queriesToRender.length > 0 ? (
           queriesToRender.map((query) => {
             const queryKey = currSite.selectors.helper(query);
@@ -67,7 +67,7 @@ export function SidebarContent({ currSite, userQueries }: Prop) {
             return (
               <div
                 key={queryKey}
-                className="group flex items-start gap-3 rounded-md border border-white/10 bg-white/5 p-2 transition-colors hover:bg-white/10"
+                className="group flex items-start rounded-md border border-white/10 bg-white/5 p-2 transition-colors hover:bg-white/10"
                 data-id={queryKey}
               >
                 <div className="flex-1 mr-5 flex">

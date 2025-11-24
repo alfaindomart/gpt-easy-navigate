@@ -5,13 +5,18 @@ import { truncate } from "../utils";
 const UNTITLED_CHAT = "Untitled conversation";
 
 export function useBookmark(currSite: Config) {
-  const [bookmarked, setBookmarked] = useState<Map<Bookmark["key"], Bookmark>>(new Map());
+  const [bookmarked, setBookmarked] = useState<Map<Bookmark["key"], Bookmark>>(
+    new Map()
+  );
 
   useEffect(() => {
     const getSavedChats = async () => {
       try {
-        const savedChats = (await storage.getItem<Array<Bookmark>>("sync:SavedChats")) ?? [];
-        const mappedChats = new Map(savedChats.map((savedChat) => [savedChat.key, savedChat]));
+        const savedChats =
+          (await storage.getItem<Array<Bookmark>>("local:SavedChats")) ?? [];
+        const mappedChats = new Map(
+          savedChats.map((savedChat) => [savedChat.key, savedChat])
+        );
         setBookmarked(mappedChats);
       } catch (err) {
         console.log(err);
@@ -52,14 +57,14 @@ export function useBookmark(currSite: Config) {
         }
 
         const updatedChats = Array.from(next.values());
-        storage.setItem("sync:SavedChats", updatedChats).catch((error) => {
+        storage.setItem("local:SavedChats", updatedChats).catch((error) => {
           console.log(error);
         });
 
         return next;
       });
     },
-    [currSite],
+    [currSite]
   );
 
   return { bookmarked, saveChat };

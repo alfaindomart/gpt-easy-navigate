@@ -1,7 +1,7 @@
 # Todo
 
 - Change selectors and CSS based on URL matches - DONE
-- Add bookmark chat feature -DONE
+- Add bookmark chat feature - DONE
 - Close the menu after user clicked outside menu - DONE
 - Add bookmark tab or popup to manage all bookmarks - DONE
 - Prevent dragging when resizing - Done
@@ -19,13 +19,14 @@
 - add AI responses in tab - DONE
 - add layou formatting - DONE
 - remember resized resized window after closing - DONE
+- Change the direction of the opened menu depending on the button's position on the screen - DONE
+- Change the arrow icon to something more noticeable - DONE
 - Make it responsive => should move when the window got smaller, like when a devtool is open
 - The menu tab bar should scroll horizontally when the window get smaller
 - add save by text fragment to bookmark
 - add all media in a chat tab
 - add all code sections in a chat tab
 - add selection-based bookmark utilizing text fragment
-- Change the arrow icon to something more noticeable
 - Add bookmark marker on the scrollbar
 - Add keyboard support (open with shortcut, navigate with arrow keys)
 - Add theming?
