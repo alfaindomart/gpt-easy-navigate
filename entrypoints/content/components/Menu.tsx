@@ -187,8 +187,10 @@ function OpenMenu() {
               });
             }}
             className={`triangle-toggle rounded-full ${
-              isOpen ? "bg-[#ec5f01de] p-2" : "bg-[#284a99] p-1.25"
-            } shadow-lg transition ring-1 inset-ring-[rgb(38_81_211)] hover:bg-[#111144] hover:ring-2 hover:ring-[rgb(109_61_14_/_83%)]`}
+              isOpen
+                ? "bg-[#ec5f01de] p-2 drop-shadow-amber-500 drop-shadow-sm"
+                : "bg-[#3d5b8e] p-1.25 bg-radial-to-br from-[#1e3a8a] to-[#111827] ring-1 ring-white/50"
+            } transition hover:bg-[#070729] hover:ring-1 hover:ring-[#ff7600ed] hover:drop-shadow-amber-500 hover:drop-shadow-md`}
             aria-expanded={isOpen}
             aria-label="Toggle assistant menu"
             type="button"

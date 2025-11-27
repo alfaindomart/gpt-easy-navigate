@@ -7,7 +7,7 @@ export default defineConfig({
     plugins: [tailwindcss()],
   }),
   manifest: {
-    permissions: ["scripting", "storage"],
+    permissions: ["storage"],
     host_permissions: ["*://chatgpt.com/c/*, *://*.google.com/*"],
     icons: {
       "16": "icon16.png",
