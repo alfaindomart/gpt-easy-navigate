@@ -18,7 +18,8 @@ export function BookmarkManager({ isActive }: BookmarkManagerProps) {
 
   const fetchBookmarks = useCallback(async () => {
     try {
-      const stored = (await storage.getItem<Bookmark[]>("sync:SavedChats")) ?? [];
+      const stored =
+        (await storage.getItem<Bookmark[]>("local:SavedChats")) ?? [];
       setBookmarks(stored);
     } catch (error) {
       console.error("Failed to load bookmarks", error);
@@ -35,8 +36,8 @@ export function BookmarkManager({ isActive }: BookmarkManagerProps) {
       const siteName = bookmark.chatUrl.includes("gemini")
         ? "Gemini"
         : bookmark.chatUrl.includes("chatgpt")
-          ? "ChatGPT"
-          : FALLBACK_SITE;
+        ? "ChatGPT"
+        : FALLBACK_SITE;
 
       const titleKey = bookmark.title?.trim() || UNTITLED_CHAT;
 
@@ -77,7 +78,7 @@ export function BookmarkManager({ isActive }: BookmarkManagerProps) {
 
     setBookmarks((prev) => {
       const next = prev.filter((bookmark) => bookmark.key !== bookmarkKey);
-      storage.setItem("sync:SavedChats", next).catch((error) => {
+      storage.setItem("local:SavedChats", next).catch((error) => {
         console.error("Failed to remove bookmark", error);
       });
       return next;
@@ -87,7 +88,10 @@ export function BookmarkManager({ isActive }: BookmarkManagerProps) {
   if (!totalCount) {
     return (
       <div className="flex h-full items-center justify-center rounded-lg border border-dashed border-white/10 bg-white/5 p-6 text-center text-sm text-gray-300">
-        <p>No bookmarks yet. Save a chat from the conversation tab to see it here.</p>
+        <p>
+          No bookmarks yet. Save a chat from the conversation tab to see it
+          here.
+        </p>
       </div>
     );
   }
@@ -99,11 +103,17 @@ export function BookmarkManager({ isActive }: BookmarkManagerProps) {
       </div>
       <div className="flex-1 space-y-3 overflow-y-auto pr-1">
         {Object.entries(grouped).map(([siteName, titles]) => {
-          const siteCount = Object.values(titles).reduce((sum, items) => sum + items.length, 0);
+          const siteCount = Object.values(titles).reduce(
+            (sum, items) => sum + items.length,
+            0
+          );
           const isSiteExpanded = expandedSite === siteName;
 
           return (
-            <div key={siteName} className="rounded-lg border border-white/10 bg-white/5">
+            <div
+              key={siteName}
+              className="rounded-lg border border-white/10 bg-white/5"
+            >
               <button
                 type="button"
                 onClick={() => toggleSite(siteName)}
@@ -111,10 +121,14 @@ export function BookmarkManager({ isActive }: BookmarkManagerProps) {
               >
                 <ChevronDown
                   size={16}
-                  className={`transition-transform ${isSiteExpanded ? "rotate-180" : ""}`}
+                  className={`transition-transform ${
+                    isSiteExpanded ? "rotate-180" : ""
+                  }`}
                 />
                 <span>{siteName}</span>
-                <span className="ml-auto text-xs text-gray-400">{siteCount}</span>
+                <span className="ml-auto text-xs text-gray-400">
+                  {siteCount}
+                </span>
               </button>
               {isSiteExpanded && (
                 <div className="space-y-2 border-t border-white/10 bg-black/10 px-3 py-2">
@@ -123,7 +137,10 @@ export function BookmarkManager({ isActive }: BookmarkManagerProps) {
                     const isTitleExpanded = expandedTitles.has(titleKey);
 
                     return (
-                      <div key={title} className="rounded-md border border-white/5 bg-white/5">
+                      <div
+                        key={title}
+                        className="rounded-md border border-white/5 bg-white/5"
+                      >
                         <button
                           type="button"
                           onClick={() => toggleTitle(siteName, title)}
@@ -136,16 +153,23 @@ export function BookmarkManager({ isActive }: BookmarkManagerProps) {
                             }`}
                           />
                           <span className="flex-1">{title}</span>
-                          <span className="text-xs text-gray-400">{items.length}</span>
+                          <span className="text-xs text-gray-400">
+                            {items.length}
+                          </span>
                         </button>
                         {isTitleExpanded && (
                           <ul className="space-y-2 border-t border-white/10 bg-black/10 px-3 py-2">
                             {items.map((bookmark) => (
                               <li
-                                key={bookmark.key ?? `${bookmark.chatUrl}-${bookmark.timeStamp}`}
+                                key={
+                                  bookmark.key ??
+                                  `${bookmark.chatUrl}-${bookmark.timeStamp}`
+                                }
                                 className="space-y-2 rounded-md bg-white/5 p-3"
                               >
-                                <p className="text-xs text-gray-300">{bookmark.previewChat}</p>
+                                <p className="text-xs text-gray-300">
+                                  {bookmark.previewChat}
+                                </p>
                                 <div className="flex items-center gap-2">
                                   <a
                                     href={bookmark.chatUrl}

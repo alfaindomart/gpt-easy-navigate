@@ -39,7 +39,7 @@ export function SidebarContent({ currSite, userQueries }: Prop) {
     options.filterSaved,
     options.sortFromNew,
     bookmarked.bookmarked,
-    currSite,
+    currSite
   );
 
   const queriesToRender = displayedQueries ?? [];
@@ -58,7 +58,7 @@ export function SidebarContent({ currSite, userQueries }: Prop) {
           <Sort options={options} setOptions={setOptions} />
         </div>
       </div>
-      <div className="flex-1 overflow-y-auto overflow-x-hidden space-y-2 pr-2 scrollbar-corner-amber-600 scrollbar-thumb-amber-500 scrollbar-thin scrollbar-track-amber-900">
+      <div className="flex-1 overflow-y-auto overflow-x-hidden space-y-2 pr-1 scrollbar-corner-cyan-950 scrollbar-thumb-cyan-900 scrollbar-thin scrollbar-track-indigo-950">
         {queriesToRender.length > 0 ? (
           queriesToRender.map((query) => {
             const queryKey = currSite.selectors.helper(query);
@@ -67,17 +67,22 @@ export function SidebarContent({ currSite, userQueries }: Prop) {
             return (
               <div
                 key={queryKey}
-                className="group flex items-start gap-3 rounded-md border border-white/10 bg-white/5 p-2 transition-colors hover:bg-white/10"
+                className="group flex items-start rounded-md border border-white/10 bg-white/5 p-2 transition-colors hover:bg-white/10"
                 data-id={queryKey}
               >
-                <div className="flex-1 mr-2 flex">
-                  <button className="peer mr-2 hover:outline-amber-50 hover:outline-1 hover:outline-offset-1 focus:outline-1 focus:outline-offset-1 peer">
+                <div className="flex-1 mr-5 flex">
+                  <button className="peer mr-2 hover:outline-amber-50 hover:outline-1 hover:outline-offset-1 focus:outline-1 focus:outline-offset-1">
                     <ChevronDown size={14} />
                   </button>
                   <button
                     type="button"
                     className="flex-1 w-full bg-transparent text-left line-clamp-2 break-words text-sm text-white transition-all whitespace-pre-wrap focus:outline-none peer-focus:line-clamp-none"
-                    onClick={() => query.scrollIntoView({ behavior: "smooth", block: "center" })}
+                    onClick={() =>
+                      query.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center",
+                      })
+                    }
                   >
                     {query.textContent.length > 5000
                       ? truncate(query.textContent) + "..."
@@ -88,7 +93,9 @@ export function SidebarContent({ currSite, userQueries }: Prop) {
                   type="button"
                   onClick={() => bookmarked.saveChat(query)}
                   className="ml-auto flex-shrink-0 rounded-md p-1.5 transition-colors hover:bg-white/10"
-                  aria-label={isBookmarked ? "Remove bookmark" : "Save bookmark"}
+                  aria-label={
+                    isBookmarked ? "Remove bookmark" : "Save bookmark"
+                  }
                 >
                   {isBookmarked ? (
                     <Star size={20} color="#FACC15" fill="#FACC15" />

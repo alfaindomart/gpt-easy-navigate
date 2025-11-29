@@ -1,10 +1,6 @@
 import OpenMenu from "./components/Menu";
 const App = () => {
-  return (
-    <OpenMenu />
-
-    // <OpenMenu />
-  );
+  return <OpenMenu />;
 };
 
 export default App;

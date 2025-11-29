@@ -1,6 +1,6 @@
 {
   "name": "IToS - I'm tired of scrolling (ChatGPT, Gemini, and more)",
-  "description": "AI Chat answers are getting longer and longer, scrolling them is getting more tedious! This extension helps quickly find and scroll to the conversation that you're looking for",
+  "description": "Scroll through long conversations faster and quickly navigate to specific messages in ChatGPT and Gemini (more sites coming...)",
   "private": true,
   "version": "1.0.0",
   "type": "module",

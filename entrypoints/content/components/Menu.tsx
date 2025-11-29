@@ -1,7 +1,7 @@
 //note to self: codex refactored this component a bit. This is the same logic as your code, mostly just different name.
 import { useEffect, useRef, useState } from "react";
-import { ChevronRight } from "lucide-react";
 import Draggable from "react-draggable";
+import { createPortal } from "react-dom";
 import { SidebarContent } from "./SidebarContent";
 import { BookmarkManager } from "./BookmarkManager";
 import { Config, siteConfig } from "../config";
@@ -10,10 +10,11 @@ import { TriangleIcon } from "@/assets/CustomIcons";
 
 type TabKey = "conversation" | "bookmarks" | "AI Responses";
 
-
 function resolveSiteFromHostname(): Config | null {
   const { hostname } = window.location;
-  const key = Object.keys(siteConfig).find((siteKey) => siteConfig[siteKey].hostname === hostname);
+  const key = Object.keys(siteConfig).find(
+    (siteKey) => siteConfig[siteKey].hostname === hostname
+  );
   return key ? siteConfig[key] : null;
 }
 
@@ -26,9 +27,68 @@ function OpenMenu() {
   const [userQueries, setUserQueries] = useState<HTMLElement[]>([]);
   const [aiResponses, setAIResponses] = useState<HTMLElement[]>([]);
   const [menuSize, setMenuSize] = useState<{ width: number; height: number }>(
-    { width: 320, height: 320 }, // default matches w-80 h-80
+    { width: 320, height: 320 } // default matches w-80 h-80
   );
+  const [triggerRect, setTriggerRect] = useState<{
+    top: number;
+    bottom: number;
+    left: number;
+    right: number;
+    width: number;
+    height: number;
+  } | null>(null);
+  const [menuDirection, setMenuDirection] = useState<{
+    vertical: "up" | "down";
+    horizontal: "left" | "right";
+  }>({
+    vertical: "down",
+    horizontal: "right",
+  });
 
+  // Determine if menu should open up/down or left/right based on available viewport space
+  const determineMenuDirection = (rect: DOMRect | null) => {
+    if (!rect) return;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const needLeft = rect.left + menuSize.width + 10 > vw;
+    const needUp = rect.bottom + menuSize.height + 10 > vh;
+    setMenuDirection({
+      horizontal: needLeft ? "left" : "right",
+      vertical: needUp ? "up" : "down",
+    });
+  };
+
+  // Update trigger rect and recalculate menu direction
+  const updateTriggerRect = (rect: DOMRect) => {
+    const normalizedRect = {
+      top: rect.top,
+      bottom: rect.bottom,
+      left: rect.left,
+      right: rect.right,
+      width: rect.width,
+      height: rect.height,
+    };
+    setTriggerRect(normalizedRect);
+    determineMenuDirection(rect);
+  };
+
+  // Calculate menu style based on trigger rect and direction, then applied to the menu's style
+  const menuStyle = {
+    width: menuSize.width,
+    height: menuSize.height,
+    top: triggerRect
+      ? menuDirection.vertical === "down"
+        ? triggerRect.bottom
+        : triggerRect.top - menuSize.height
+      : 0,
+    left: triggerRect
+      ? menuDirection.horizontal === "right"
+        ? triggerRect.left
+        : triggerRect.right - menuSize.width
+      : 0,
+  };
+
+  // Refresh site data: current site config and queries
   const refreshSiteData = () => {
     const nextSite = resolveSiteFromHostname();
     setCurrSite(nextSite);
@@ -39,12 +99,14 @@ function OpenMenu() {
     }
 
     const queries = Array.from(
-      document.querySelectorAll<HTMLElement>(nextSite.selectors.userQueries),
+      document.querySelectorAll<HTMLElement>(nextSite.selectors.userQueries)
     );
     setUserQueries(queries);
 
     const responses = Array.from(
-      document.querySelectorAll<HTMLElement>(nextSite.selectors.aiResponses ?? ""),
+      document.querySelectorAll<HTMLElement>(
+        nextSite.selectors.aiResponses ?? ""
+      )
     );
     setAIResponses(responses);
   };
@@ -71,6 +133,7 @@ function OpenMenu() {
     el.style.width = `${menuSize.width}px`;
     el.style.height = `${menuSize.height}px`;
 
+    // Set up an observer to track size changes
     const ro = new ResizeObserver((entries) => {
       const entry = entries[0];
       if (!entry) return;
@@ -83,6 +146,19 @@ function OpenMenu() {
     };
   }, [isOpen]);
 
+  // Recalculate menu direction when menu size, open state, or trigger rect changes
+  useEffect(() => {
+    if (!isOpen || !triggerRect) return;
+    determineMenuDirection(
+      new DOMRect(
+        triggerRect.left,
+        triggerRect.top,
+        triggerRect.width,
+        triggerRect.height
+      )
+    );
+  }, [menuSize, isOpen, triggerRect]);
+
   const tabButtonClasses = (tab: TabKey) =>
     [
       "flex-1 rounded-md px-2 py-1 text-xs font-medium transition-colors",
@@ -92,80 +168,101 @@ function OpenMenu() {
     ].join(" ");
 
   return (
-    <Draggable nodeRef={nodeRef} cancel="div .resize">
-      <div ref={nodeRef} className="absolute left-80 bottom-20 z-50 h-10 w-10">
-        <button
-          onClick={() =>
-            setIsOpen((prev) => {
-              const next = !prev;
-              if (next) {
-                setActiveTab("conversation");
-              }
-              return next;
-            })
-          }
-          className={`triangle-toggle rounded-full ${isOpen? "bg-amber-700": "bg-gray-900/80"}  p-2 text-red-500 shadow-lg transition hover:bg-gray-800`}
-          aria-expanded={isOpen}
-          aria-label="Toggle assistant menu"
-          type="button"
+    <>
+      <Draggable nodeRef={nodeRef} cancel="div .resize">
+        <div
+          ref={nodeRef}
+          className="absolute left-80 bottom-20 z-50 h-10 w-10"
         >
-          {/* <ChevronRight className={isOpen ? "rotate-90 transition" : "transition"} /> */}
-          <div className={isOpen ? "hidden" : "flex flex-col m-1"}>
-            <TriangleIcon fill="black" viewBox="0 0 800 800" size="14" className="triangle-top"/>
-            <TriangleIcon fill="black" viewBox="0 0 800 800" size="14" className="rotate-180 triangle-bottom"/>
-          </div>
-        </button>
-        {isOpen && (
-          <div
-            ref={refMenu}
-            style={{ width: menuSize.width, height: menuSize.height }}
-            className="resize m-3 flex min-h-60 min-w-48 max-h-120 max-w-120 flex-col overflow-hidden rounded-2xl bg-gray-950/95 ring-1 ring-white/10 backdrop-blur"
+          <button
+            onClick={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect();
+              updateTriggerRect(rect);
+              setIsOpen((prev) => {
+                const next = !prev;
+                if (next) {
+                  setActiveTab("conversation");
+                }
+                return next;
+              });
+            }}
+            className={`triangle-toggle rounded-full ${
+              isOpen
+                ? "bg-[#ec5f01de] p-2 drop-shadow-amber-500 drop-shadow-sm"
+                : "bg-[#3d5b8e] p-1.25 bg-radial-to-br from-[#1e3a8a] to-[#111827] ring-1 ring-white/50"
+            } transition hover:bg-[#070729] hover:ring-1 hover:ring-[#ff7600ed] hover:drop-shadow-amber-300/50 hover:drop-shadow-md`}
+            aria-expanded={isOpen}
+            aria-label="Toggle assistant menu"
+            type="button"
           >
-            <div className="flex items-center gap-2 border-b border-white/10 bg-gray-900/70 px-3 py-2">
-              <button
-                type="button"
-                className={tabButtonClasses("conversation")}
-                onClick={() => setActiveTab("conversation")}
-              >
-                Conversations ({userQueries.length})
-              </button>
-              <button
-                type="button"
-                className={tabButtonClasses("bookmarks")}
-                onClick={() => setActiveTab("bookmarks")}
-              >
-                Bookmarks
-              </button>
-              <button
-                type="button"
-                className={tabButtonClasses("AI Responses")}
-                onClick={() => {
-                  setActiveTab("AI Responses");
-                  console.log(aiResponses[0].innerText);
-                }}
-              >
-                AI Responses ({aiResponses.length})
-              </button>
+            {/* <ChevronRight className={isOpen ? "rotate-90 transition" : "transition"} /> */}
+            <div className={isOpen ? "hidden" : "flex flex-col m-1"}>
+              <TriangleIcon
+                fill="black"
+                viewBox="0 0 800 800"
+                size="14"
+                className="triangle-top"
+              />
+              <TriangleIcon
+                fill="black"
+                viewBox="0 0 800 800"
+                size="14"
+                className="rotate-180 triangle-bottom"
+              />
             </div>
-            <div className="flex-1 overflow-auto p-3 pr-1">
-              {activeTab === "conversation" ? (
-                currSite ? (
-                  <SidebarContent currSite={currSite} userQueries={userQueries} />
-                ) : (
-                  <div className="flex h-full items-center justify-center rounded-lg border border-dashed border-white/10 bg-white/5 p-4 text-center text-sm text-gray-300">
-                    This site is not supported yet.
-                  </div>
-                )
-              ) : activeTab === "bookmarks" ? (
-                <BookmarkManager isActive={activeTab === "bookmarks"} />
-              ) : (
-                <SidebarContent currSite={currSite} userQueries={aiResponses} />
-              )}
-            </div>
+          </button>
+        </div>
+      </Draggable>
+      {isOpen && triggerRect && (
+        <div
+          ref={refMenu}
+          style={menuStyle}
+          className="resize fixed flex min-h-60 flex-col overflow-hidden rounded-2xl shadow-2xl bg-gray-800 ring-1 ring-black/20 z-50"
+        >
+          <div className="flex items-center gap-2 border-b border-1 border-white/10 bg-[oklch(0.15_0.05_253.74)] px-3 py-3">
+            <button
+              type="button"
+              className={tabButtonClasses("conversation")}
+              onClick={() => setActiveTab("conversation")}
+            >
+              You ({userQueries.length})
+            </button>
+            <button
+              type="button"
+              className={tabButtonClasses("AI Responses")}
+              onClick={() => {
+                setActiveTab("AI Responses");
+                console.log(aiResponses[0].innerText);
+              }}
+            >
+              AI ({aiResponses.length})
+            </button>
+            <button
+              type="button"
+              className={tabButtonClasses("bookmarks")}
+              onClick={() => setActiveTab("bookmarks")}
+            >
+              Bookmarks
+            </button>
           </div>
-        )}
-      </div>
-    </Draggable>
+          <div className="flex-1 overflow-auto p-3 pr-1 bg-gray-900">
+            {activeTab === "conversation" ? (
+              currSite ? (
+                <SidebarContent currSite={currSite} userQueries={userQueries} />
+              ) : (
+                <div className="flex h-full items-center justify-center rounded-lg border border-dashed border-white/10 bg-cyan-800 p-4 text-center text-sm text-gray-300">
+                  This site is not supported yet.
+                </div>
+              )
+            ) : activeTab === "bookmarks" ? (
+              <BookmarkManager isActive={activeTab === "bookmarks"} />
+            ) : (
+              <SidebarContent currSite={currSite} userQueries={aiResponses} />
+            )}
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
