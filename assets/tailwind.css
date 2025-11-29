@@ -4,7 +4,7 @@
     @keyframes triangle-top-flash {
         0%, 49% {
             fill: rgb(255, 98, 0);
-            filter: drop-shadow(0 0 8px rgb(255, 120, 36));
+            filter: drop-shadow(0 -1px 5px rgb(255, 120, 36));
         }
         50%, 100% {fill: black; filter: none;}
     }
@@ -13,7 +13,7 @@
         0%, 49% {fill: black; filter: none}
         50%, 100% {
             fill: rgb(255, 98, 0);    
-            filter: drop-shadow(0 0 8px rgb(255, 120, 36))         
+            filter: drop-shadow(0 -1px 5px rgb(255, 120, 36))         
 }
     }
 
