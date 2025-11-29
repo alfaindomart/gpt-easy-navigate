@@ -9,6 +9,7 @@ export function useBookmark(currSite: Config) {
     new Map()
   );
 
+  //fetch saved chats from storage on mount
   useEffect(() => {
     const getSavedChats = async () => {
       try {

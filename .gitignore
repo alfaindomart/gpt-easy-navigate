@@ -26,3 +26,4 @@ web-ext.config.ts
 *.sw?
 assets/triangle-repo.af~lock~
 assets/triangle-repo.af~lock~
+notes.md
